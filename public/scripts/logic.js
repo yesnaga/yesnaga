@@ -1,35 +1,50 @@
 console.log('logic');
 const tiles = {
   0: {
-    r: 1,
-    bl: 2,
-    br: 3
+    neighbours: {
+      r: 1,
+      bl: 2,
+      br: 3
+    },
+    movable: false
   },
   1: {
-    l: 0,
-    bl: 3,
+    neighbours: {
+      l: 0,
+      bl: 3,
+    }, movable: false
   },
   2: {
-    tr: 0,
-    r: 3
+    neighbours: {
+      tr: 0,
+      r: 3
+    }, movable: false
   },
   3: {
-    tl: 0,
-    tr: 1,
-    l: 2,
-    br: 4,
+    neighbours: {
+      tl: 0,
+      tr: 1,
+      l: 2,
+      br: 4,
+    }, movable: false
   },
   4: {
-    tl: 3,
-    br: 5
+    neighbours: {
+      tl: 3,
+      br: 5
+    }, movable: true
   },
   5: {
-    tl: 3,
-    br: 5
+    neighbours: {
+      tl: 3,
+      br: 5
+    }, movable: false
   },
   6: {
-    tl: 5,
-    br: 5
+    neighbours: {
+      tl: 5,
+      br: 5
+    }
   }
 }
 const players = {
@@ -62,8 +77,29 @@ function drawTile(id, x, y, drawn) {
   // m
   const m = 2
   drawn.push(id)
+  fill(255);
+  // adds weight to movable circles
+  if (tiles[id].movable) {
+    strokeWeight(4);
+  }
   ellipse(x, y, d);
-  const t = tiles[id]
+  strokeWeight(1);
+
+  /* textSize(32);
+  fill(0, 102, 153);
+  text(id.toString(), x, y) */
+  const p1Color = '#F79B18'
+  const p2Color = '#00ADEF'
+  if (players[0].includes(id)) {
+    fill(p1Color);
+    ellipse(x, y, d - 20);
+  }
+  if (players[1].includes(id)) {
+    fill(p2Color);
+    ellipse(x, y, d - 20);
+
+  }
+  const t = tiles[id].neighbours
 
   const neighbours = {
     tl: {
@@ -94,6 +130,7 @@ function drawTile(id, x, y, drawn) {
   Object.keys(t).forEach(d => {
     if (!drawn.includes(t[d])) {
       drawTile(t[d], neighbours[d].x(x), neighbours[d].y(y), drawn)
+
     }
   })
 
