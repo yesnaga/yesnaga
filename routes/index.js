@@ -8,6 +8,11 @@ const init = app => {
     res.render('index', { title: 'Yesnaga' });
   });
 
+  router.get('/ping', (req, res) => {
+    const currentTime = new Date().getTime()
+    res.status(200).send(`pong ${currentTime}`)
+  });
+
   router.get('/board', (req, res) => {
     res.render('board');
   });
