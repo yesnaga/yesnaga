@@ -183,7 +183,6 @@ function setup() {
 }
 
 function draw() {
-
   const drawn = []
   drawTile(0, 200, 200, drawn)
 }
@@ -207,9 +206,7 @@ function drawTile(id, x, y, drawn) {
   ellipse(x, y, d);
   strokeWeight(1);
 
-  /* textSize(32);
-  fill(0, 102, 153);
-  text(id.toString(), x, y) */
+
   const p1Color = '#F79B18'
   const p2Color = '#00ADEF'
   if (players[0].includes(id)) {
@@ -219,8 +216,10 @@ function drawTile(id, x, y, drawn) {
   if (players[1].includes(id)) {
     fill(p2Color);
     ellipse(x, y, d - 20);
-
   }
+  textSize(32);
+  fill(255, 0, 153);
+  text(id.toString(), x - 20, y + 10)
   const t = tiles[id].neighbours
 
   const neighbours = {
@@ -251,9 +250,9 @@ function drawTile(id, x, y, drawn) {
   }
   Object.keys(t).forEach(d => {
     if (!drawn.includes(t[d])) {
+      console.log(drawn)
       drawTile(t[d], neighbours[d].x(x), neighbours[d].y(y), drawn)
-
     }
-  })
 
+  })
 }
