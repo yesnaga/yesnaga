@@ -20,14 +20,7 @@
 		"no-await-in-loop": "off",
 		"class-methods-use-this": "off",
 		"no-underscore-dangle": [
-			"error",
-			{
-				"allow": [
-					"_id",
-					"_v",
-					"__v"
-				]
-			}
+			"error"
 		],
 		"no-shadow": [
 			"error",
@@ -80,21 +73,6 @@
 				"ObjectExpression": 1,
 				"ImportDeclaration": 1,
 				"flatTernaryExpressions": false,
-				"ignoredNodes": [
-					"JSXElement",
-					"JSXElement > *",
-					"JSXAttribute",
-					"JSXIdentifier",
-					"JSXNamespacedName",
-					"JSXMemberExpression",
-					"JSXSpreadAttribute",
-					"JSXExpressionContainer",
-					"JSXOpeningElement",
-					"JSXClosingElement",
-					"JSXText",
-					"JSXEmptyExpression",
-					"JSXSpreadChild"
-				],
 				"ignoreComments": false
 			}
 		],
@@ -108,7 +86,7 @@
 	],
 	"env": {
 		"node": true,
-		"mocha": true,
+		"jest": true,
 		"browser": true
 	},
 	"overrides": [
