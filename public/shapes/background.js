@@ -4,6 +4,7 @@ class Background {
         this.xCloud1 = 0;
         this.xSun = -200
         this.ySun = 50
+        this.xSunSpeed = 0.5
     }
 
     async setup() {
@@ -33,7 +34,7 @@ class Background {
         image(this.bgCloud1, this.xCloud1, 0, width);
         image(this.bgCloud1, this.xCloud1 + width, 0, width);
 
-        this.xSun -= 0.5;
+        this.xSun -= this.xSunSpeed;
         // elegant solution for sunraise and sunset.
         if (this.xSun < width / 2) {
             this.ySun += 0.1

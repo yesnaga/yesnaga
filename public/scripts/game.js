@@ -11,6 +11,8 @@ class Game {
         this.players = p
 
         this.hint = false
+
+        this.cheatArray = []
     }
 
     setup() {
@@ -51,9 +53,32 @@ class Game {
 
     showHint() {
         if (keyCode === 32) {
-            console.log('changing')
+            console.log('showHint')
             this.color = 'red'
         }
+    }
+
+    cheatCode(key) {
+        // user can trigger easter egg with the konami code
+        this.cheatArray.push(key)
+        const konamiCheat = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"]
+        const stringifiedCheat = JSON.stringify(konamiCheat).toLowerCase()
+        const stringifiedInput = JSON.stringify(this.cheatArray).toLowerCase()
+
+        if (stringifiedInput === stringifiedCheat) {
+            this.background.xSunSpeed = 50
+            console.warn('Super Yesnaga mode: activated')
+            console.warn('Starting reactors: online')
+            console.warn('Enabling advanced systems')
+            console.error('missing cpu power - aborting..')
+            setTimeout(() => {
+                this.background.xSunSpeed = 0.5
+            }, 3000);
+        }
+        // user is given 3 seconds to type code before array is reset
+        setTimeout(() => {
+            this.cheatArray = []
+        }, 3000);
     }
 
 }
