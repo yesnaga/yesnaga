@@ -199,13 +199,8 @@ function setup() {
 }
 
 function draw() {
-<<<<<<< HEAD
-  const drawn = []
-  drawTile(0, 200, 200, drawn)
-=======
 	const drawn = [];
 	drawTile(0, 200, 200, drawn);
->>>>>>> ae5a8cda3468a396bedd9af907308215235f2282
 }
 
 function drawTile(id, x, y, drawn) {
@@ -226,57 +221,6 @@ function drawTile(id, x, y, drawn) {
 	ellipse(x, y, d);
 	strokeWeight(1);
 
-<<<<<<< HEAD
-
-  const p1Color = '#F79B18'
-  const p2Color = '#00ADEF'
-  if (players[0].includes(id)) {
-    fill(p1Color);
-    ellipse(x, y, d - 20);
-  }
-  if (players[1].includes(id)) {
-    fill(p2Color);
-    ellipse(x, y, d - 20);
-  }
-  textSize(32);
-  fill(255, 0, 153);
-  text(id.toString(), x - 20, y + 10)
-  const t = tiles[id].neighbours
-
-  const neighbours = {
-    tl: {
-      x: (oldX) => oldX - (d + m) * sin30 / sin90,
-      y: (oldY) => oldY - (d + m) * sin60 / sin90
-    },
-    tr: {
-      x: (oldX) => oldX + (d + m) * sin30 / sin90,
-      y: (oldY) => oldY - (d + m) * sin60 / sin90
-    },
-    l: {
-      x: (oldX) => oldX - (d + m),
-      y: (oldY) => oldY
-    },
-    r: {
-      x: (oldX) => oldX + (d + m),
-      y: (oldY) => oldY
-    },
-    bl: {
-      x: (oldX) => oldX - (d + m) * sin30 / sin90,
-      y: (oldY) => oldY + (d + m) * sin60 / sin90
-    },
-    br: {
-      x: (oldX) => oldX + (d + m) * sin30 / sin90,
-      y: (oldY) => oldY + (d + m) * sin60 / sin90
-    },
-  }
-  Object.keys(t).forEach(d => {
-    if (!drawn.includes(t[d])) {
-      console.log(drawn)
-      drawTile(t[d], neighbours[d].x(x), neighbours[d].y(y), drawn)
-    }
-
-  })
-=======
 	/* textSize(32);
   fill(0, 102, 153);
   text(id.toString(), x, y) */
@@ -323,5 +267,4 @@ function drawTile(id, x, y, drawn) {
 			drawTile(t[d], neighbours[d].x(x), neighbours[d].y(y), drawn);
 		}
 	});
->>>>>>> ae5a8cda3468a396bedd9af907308215235f2282
 }
