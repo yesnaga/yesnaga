@@ -16,7 +16,6 @@ class Background {
 
     draw() {
         background('#222222') // this for resetting the background resulting in no trail of clouds on board.
-
         // scrollspeed
         this.xCloud0 -= 1;
         // resetting/looping the clouds when outside of canvas
@@ -36,17 +35,17 @@ class Background {
 
         this.xSun -= this.xSunSpeed;
         // elegant solution for sunraise and sunset.
-        if (this.xSun < width / 2) {
+        if (this.xSun < (width / 2) + 100) {
             this.ySun += 0.1
         } else {
             this.ySun -= 0.1
         }
-
         if (this.xSun <= -250) {
             this.xSun = width;
             this.ySun = 50
         }
 
         image(this.bgSun, this.xSun, this.ySun, 200, 200);
+
     }
 }

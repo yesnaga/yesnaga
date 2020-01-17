@@ -12,6 +12,7 @@ class Game {
 
         this.hint = false
 
+        this.drawBackground = false
         this.cheatArray = []
     }
 
@@ -21,7 +22,9 @@ class Game {
     }
 
     draw() {
-        this.background.draw();
+        if (this.drawBackground) {
+            this.background.draw();
+        }
         this.tiles.forEach((tile, i) => {
             if (this.hint) {
                 // something here?
@@ -61,6 +64,11 @@ class Game {
     cheatCode(key) {
         // user can trigger easter egg with the konami code
         this.cheatArray.push(key)
+        console.log(key, 'key')
+        if (key === 'b' || key === 'B') {
+            this.drawBackground = !this.drawBackground
+            background('white') // this for resetting the background resulting in no trail of clouds on board.
+        }
         const konamiCheat = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"]
         const stringifiedCheat = JSON.stringify(konamiCheat).toLowerCase()
         const stringifiedInput = JSON.stringify(this.cheatArray).toLowerCase()
@@ -70,8 +78,8 @@ class Game {
             console.warn('Super Yesnaga mode: activated')
             console.warn('Starting reactors: online')
             console.warn('Enabling advanced systems')
-            console.error('missing cpu power - aborting..')
             setTimeout(() => {
+                console.error('missing cpu power - aborting..')
                 this.background.xSunSpeed = 0.5
             }, 3000);
         }
