@@ -9,6 +9,7 @@ class Tile {
             p2: '#00ADEF',
         }
         this.colorIndicator = player
+        this.hovering = false
 
 
     }
@@ -21,13 +22,13 @@ class Tile {
             fill("#e5e5e5");
             ellipse(this.x, this.y, this.d + 20);
             fill(this.colors[this.colorIndicator]);
-            ellipse(this.x, this.y, this.d);
+            const hoverValue = this.hovering ? 20 : 0
+            ellipse(this.x, this.y, this.d + hoverValue);
         } else {
-            // neutral player pieces
             fill("#e5e5e5");
             ellipse(this.x, this.y, this.d);
         }
-
     }
+
 
 }

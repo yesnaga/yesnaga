@@ -10,7 +10,6 @@ function draw() {
 }
 
 function keyPressed() {
-    game.showHint();
     game.cheatCode(key)
 }
 

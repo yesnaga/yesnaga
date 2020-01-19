@@ -35,7 +35,7 @@ class Background {
 
         this.xSun -= this.xSunSpeed;
         // elegant solution for sunraise and sunset.
-        if (this.xSun < (width / 2) + 100) {
+        if (this.xSun < (width / 2)) {
             this.ySun += 0.1
         } else {
             this.ySun -= 0.1

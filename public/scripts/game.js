@@ -1,16 +1,15 @@
 class Game {
     constructor(n, t, p) {
         this.background = new Background();
+        this.hud = new Hud();
         // filled with Tile-classes
         this.tiles = [];
-        // filled with ids of already existing tiles. could probably be 
+        // filled with ids of already existing tiles
         this.drawnTiles = []
 
         this.neighbours = n
         this.tilesSetup = t
         this.players = p
-
-        this.hint = false
 
         this.drawBackground = false
         this.cheatArray = []
@@ -26,11 +25,14 @@ class Game {
             this.background.draw();
         }
         this.tiles.forEach((tile, i) => {
-            if (this.hint) {
-                // something here?
-            }
             tile.draw();
+            if (this.hoverCheck(tile, mouseX, mouseY)) {
+                tile.hovering = true
+            } else {
+                tile.hovering = false
+            }
         });
+        this.hud.draw()
     }
     pushTile(id, x, y) {
         const t = this.tilesSetup[id].neighbours
@@ -54,18 +56,10 @@ class Game {
         })
     }
 
-    showHint() {
-        if (keyCode === 32) {
-            console.log('showHint')
-            this.color = 'red'
-        }
-    }
-
     cheatCode(key) {
         // user can trigger easter egg with the konami code
         this.cheatArray.push(key)
-        console.log(key, 'key')
-        if (key === 'b' || key === 'B') {
+        if (key === 'B' || key.toLowerCase() === 'q') {
             this.drawBackground = !this.drawBackground
             background('white') // this for resetting the background resulting in no trail of clouds on board.
         }
@@ -83,12 +77,23 @@ class Game {
                 this.background.xSunSpeed = 0.5
             }, 3000);
         }
+
         // user is given 3 seconds to type code before array is reset
         setTimeout(() => {
             this.cheatArray = []
         }, 3000);
     }
 
+    hoverCheck(tile, mX, mY) {
+        const r = 35 // or 40
+        if (tile.x - r < mX // left
+            && tile.x + r > mX // right
+            && tile.y - r < mY // top 
+            && tile.y + r > mY) { // bottom
+            return true
+        }
+        return false
+    }
 }
 
 
