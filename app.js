@@ -5,7 +5,8 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const helmet = require('helmet');
 
-const createRoutes = require('./routes');
+const baseRoutes = require('./routes');
+const apiRoutes = require('./routes/api');
 
 const app = express();
 
@@ -21,7 +22,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-createRoutes(app);
+app.use(baseRoutes);
+app.use('/api', apiRoutes);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

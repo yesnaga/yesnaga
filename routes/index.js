@@ -1,7 +1,5 @@
 const express = require('express');
 
-const api = require('./api');
-
 const router = express.Router();
 
 /* GET home page. */
@@ -18,9 +16,4 @@ router.get('/board', (req, res) => {
 	res.render('board');
 });
 
-const init = (app) => {
-	app.use(router);
-	api.init(app);
-};
-
-module.exports = init;
+module.exports = router;
