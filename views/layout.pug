@@ -7,8 +7,7 @@ html
     block content
     input(
       type='checkbox'
-      name='agreement'
-      onclick="console.log(game.tiles.forEach(t=> t.debug=!t.debug))"
+      onclick="game.tiles.forEach(t=> t.debug=!t.debug)"
       checked
     )
     a Debug
