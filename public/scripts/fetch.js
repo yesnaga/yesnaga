@@ -12,8 +12,9 @@ const errHandler = err => {
     throw err
 }
 
-const getBoard = () => {
-    fetch(`/api/board`, { method: 'GET' })
+const getBoard = async () => {
+
+    const response = await fetch(`/api/board`, { method: 'GET' })
         .then((response) => {
             if (response.ok) {
                 return response.json()
@@ -21,9 +22,10 @@ const getBoard = () => {
             throw new Error('Request failed.');
         })
         .then(data => {
-            console.log(data, 'data')
+            return data
         })
         .catch(errHandler)
+    return await response
 }
 
 const updateBoard = (body = 42) => {

@@ -1,19 +1,20 @@
 class Game {
-    constructor(n, t, p, gameHistory = []) {
+    constructor(gameObject) {
+
         this.background = new Background();
-        this.hud = new Hud(gameHistory);
+        this.hud = new Hud([,]);
         // filled with Tile-classes
         this.tiles = [];
         // filled with ids of already existing tiles
         this.drawnTiles = []
 
-        this.neighbours = n
-        this.tilesSetup = t
-        this.players = p
+        this.neighbours = NEIGHBOURS
+        this.tilesSetup = gameObject.discs
+        this.players = gameObject.players
 
         this.drawBackground = false
         this.cheatArray = []
-        this.gameHistory = gameHistory
+        this.gameHistory = [,]
     }
 
     getPlayerTurn() {
@@ -43,13 +44,13 @@ class Game {
         const t = this.tilesSetup[id].neighbours
         this.drawnTiles.push(id)
 
-        if (this.players[0].includes(id)) {
+        if (this.players[0].tokens.some(t => t.tile === id)) {
             this.tiles.push(new Tile(x, y, 60, 'p1'))
-            return;
+            return
         }
-        if (this.players[1].includes(id)) {
+        if (this.players[1].tokens.some(t => t.tile === id)) {
             this.tiles.push(new Tile(x, y, 60, 'p2'))
-            return;
+            return
         }
 
         this.tiles.push(new Tile(x, y, 80))

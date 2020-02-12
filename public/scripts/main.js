@@ -1,4 +1,11 @@
-const game = new Game(NEIGHBOURS, TILESSETUP, PLAYERS);
+
+let game;
+const initGame = async () => {
+    const response = await getBoard()
+    game = new Game(response)
+}
+initGame()
+
 
 function setup() {
     createCanvas(1000, 600);

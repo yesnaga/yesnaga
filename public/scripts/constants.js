@@ -32,7 +32,8 @@ const NEIGHBOURS = {
     },
 }
 
-const TILESSETUP = {
+// unused
+/* const TILESSETUP = {
     0: {
         neighbours: {
             r: 2,
@@ -200,11 +201,11 @@ const TILESSETUP = {
         }, movable: false
     },
 
-}
-
+} */
+/* // unused
 const PLAYERS = {
     // player one
     0: [16, 8, 12],
     // player two
     1: [18, 10, 14]
-}
+} */
