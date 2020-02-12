@@ -1,7 +1,7 @@
 class Game {
-    constructor(n, t, p) {
+    constructor(n, t, p, gameHistory = []) {
         this.background = new Background();
-        this.hud = new Hud();
+        this.hud = new Hud(gameHistory);
         // filled with Tile-classes
         this.tiles = [];
         // filled with ids of already existing tiles
@@ -13,6 +13,11 @@ class Game {
 
         this.drawBackground = false
         this.cheatArray = []
+        this.gameHistory = gameHistory
+    }
+
+    getPlayerTurn() {
+        return this.gameHistory.length % 2 ? 'p2' : 'p1'
     }
 
     setup() {

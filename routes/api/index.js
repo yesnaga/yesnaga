@@ -9,4 +9,10 @@ router.get('/board', (req, res) => {
 	res.json(BoardFactory.toObject(new Board()));
 });
 
+// test route
+router.post('/board', (req, res) => {
+	const foo = req.body.body
+	return res.json({ foo })
+});
+
 module.exports = router;

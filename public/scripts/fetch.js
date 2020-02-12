@@ -1,7 +1,7 @@
-const baseUrl = process.env.NODE_ENV === 'production'
+/* const baseUrl = process.env.NODE_ENV === 'production'
     ? '/api'
-    : `http://${window.location.hostname}:3000/api`,
-
+    : `http://${window.location.hostname}:3000/api`
+ */
 
 const errHandler = err => {
     console.error(err)
@@ -13,20 +13,22 @@ const errHandler = err => {
 }
 
 const getBoard = () => {
-    fetch(`/${baseUrl}/board`, { method: 'GET' })
+    fetch(`/api/board`, { method: 'GET' })
         .then((response) => {
-            if (response.ok) return response.json();
+            if (response.ok) {
+                return response.json()
+            }
             throw new Error('Request failed.');
         })
-        .then((response) => {
-            console.log(response, 'response')
+        .then(data => {
+            console.log(data, 'data')
         })
         .catch(errHandler)
 }
 
-const updateBoard = body => {
-    fetch(`/${baseUrl}/board`, {
-        method: 'PUT',
+const updateBoard = (body = 42) => {
+    fetch(`/api/board`, {
+        method: 'POST',
         body: JSON.stringify({ body }),
         headers: {
             Accept: 'application/json',
@@ -35,10 +37,13 @@ const updateBoard = body => {
     })
         .then((response) => {
             if (response.ok) {
-                console.log('Board updated!');
-                return;
+                console.log(response, 'response')
+                return response.json()
             }
-            throw new Error('Request failed.');
+            throw new Error('Request failed.')
+        })
+        .then(data => {
+            console.log(data, 'data')
         })
         .catch(errHandler)
 }
