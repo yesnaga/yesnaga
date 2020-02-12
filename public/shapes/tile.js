@@ -8,26 +8,30 @@ class Tile {
             p1: '#F79B18',
             p2: '#00ADEF',
         }
-        this.colorIndicator = player
+        this.colorIndicator = player //enum: ['p1','p2']
         this.hovering = false
 
         this.debug = true
+        this.clicked = false
     }
     setup() {
 
     }
     draw() {
-        if (this.colorIndicator) {
-            // ensures background for player tiles
+
+        if (this.colorIndicator) { // check if tile is owned by player
             fill("#e5e5e5");
             ellipse(this.x, this.y, this.d + 20);
             fill(this.colors[this.colorIndicator]);
-            const hoverValue = this.hovering ? 20 : 0
-            ellipse(this.x, this.y, this.d + hoverValue);
-        } else {
+            const hoverValue = this.hovering ? 10 : 0
+            const clickValue = this.clicked ? 10 : 0
+            ellipse(this.x, this.y, this.d + hoverValue + clickValue);
+        }
+        else {
             fill("#e5e5e5");
             ellipse(this.x, this.y, this.d);
         }
+
         // debug
         if (this.debug) {
             fill('black')

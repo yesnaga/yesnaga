@@ -30,8 +30,6 @@ class Background {
             this.xCloud1 = 0;
         }
 
-        image(this.bgCloud1, this.xCloud1, 0, width);
-        image(this.bgCloud1, this.xCloud1 + width, 0, width);
 
         this.xSun -= this.xSunSpeed;
         // elegant solution for sunraise and sunset.
@@ -46,6 +44,10 @@ class Background {
         }
 
         image(this.bgSun, this.xSun, this.ySun, 200, 200);
+
+        image(this.bgCloud1, this.xCloud1, 0, width);
+        image(this.bgCloud1, this.xCloud1 + width, 0, width);
+
 
     }
 }

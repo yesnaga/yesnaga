@@ -19,4 +19,7 @@ function draw() {
 function keyPressed() {
     game.cheatCode(key)
 }
+function mouseClicked(e) {
+    game.clickTile(e)
+}
 
