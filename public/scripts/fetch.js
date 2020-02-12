@@ -39,7 +39,6 @@ const updateBoard = (body = 42) => {
     })
         .then((response) => {
             if (response.ok) {
-                console.log(response, 'response')
                 return response.json()
             }
             throw new Error('Request failed.')

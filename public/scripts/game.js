@@ -43,17 +43,15 @@ class Game {
     pushTile(id, x, y) {
         const t = this.tilesSetup[id].neighbours
         this.drawnTiles.push(id)
-
         if (this.players[0].tokens.some(t => t.tile === id)) {
-            this.tiles.push(new Tile(x, y, 60, 'p1'))
+            this.tiles.push(new Tile(x, y, 60, this.tilesSetup[id], 'p1'))
             return
         }
         if (this.players[1].tokens.some(t => t.tile === id)) {
-            this.tiles.push(new Tile(x, y, 60, 'p2'))
+            this.tiles.push(new Tile(x, y, 60, this.tilesSetup[id], 'p2'))
             return
         }
-
-        this.tiles.push(new Tile(x, y, 80))
+        this.tiles.push(new Tile(x, y, 80, this.tilesSetup[id]))
 
         Object.keys(t).forEach(d => {
             if (!this.drawnTiles.includes(t[d])) {
