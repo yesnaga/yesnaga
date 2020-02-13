@@ -95,17 +95,15 @@ class Game {
     hoverCheck(tile, mX, mY) {
         const playerTurnIndex = this.getPlayerTurnIndex()
         const tileId = tile.tileInfo.id
-        // ensures that player is hovering his own pieces
-        if (this.players[playerTurnIndex].tokens.every(t => t.tile !== tileId)) {
-            return false
-        }
-
         const r = 35 // or 40
+
         if (tile.x - r < mX // left
             && tile.x + r > mX // right
             && tile.y - r < mY // top 
             && tile.y + r > mY) { // bottom
-            return true
+            if (this.players[playerTurnIndex].tokens.some(t => t.tile === tileId)) {
+                return true
+            }
         }
         return false
     }
@@ -113,20 +111,19 @@ class Game {
     // not dry
     // reuse hover function somehow!
     clickTile(e) {
-        const xmin = e.offsetX
-        const xmax = e.offsetX
-        const ymin = e.offsetY
-        const ymax = e.offsetY
-
+        /* this.hoverCheck(false, mouseX, mouseY) */
         const playerTurnIndex = this.getPlayerTurnIndex()
-        let tileId
+        let tileId;
 
-
-        this.tiles.forEach(t => t.clicked = false)
         this.tiles.forEach((t, i) => {
-            if (xmin > t.x - 35 && xmax < t.x + 35 && ymin > t.y - 35 && ymax < t.y + 35) {
+            t.clicked = false // unclicks all tiles
+            const r = 35 // or 40
+            if (t.x - r < mouseX // left
+                && t.x + r > mouseX // right
+                && t.y - r < mouseY // top
+                && t.y + r > mouseY) { // bottom
                 tileId = this.tiles[i].tileInfo.id
-                if (this.players[playerTurnIndex].tokens.some(t => t.tile !== tileId)) {
+                if (this.players[playerTurnIndex].tokens.some(t => t.tile === tileId)) {
                     this.tiles[i].clicked = !this.tiles[i].clicked
                 }
             }
