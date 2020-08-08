@@ -1,17 +1,19 @@
 class Hud {
 	constructor(gameHistory) {
 		this.gameHistory = gameHistory;
-		this.playerInformation = {
-			p1: {
+		this.playerInformation = [
+			{
 				color: '#F79B18',
 				name: 'Max',
 			},
-			p2: {
+			{
 				color: '#00ADEF',
 				name: 'Tor',
 			},
-		};
+
+		];
 	}
+
 
 	setup() {
 		console.log('Hud setup');
