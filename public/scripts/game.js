@@ -1,20 +1,21 @@
 class Game {
     constructor(gameObject) {
-
         this.background = new Background();
         this.hud = new Hud([,]);
         // filled with Tile-classes
-        this.tiles = [];
         // filled with ids of already existing tiles
         this.drawnTiles = []
+        this.playerTiles = []
+
+        this.tiles = []
 
         this.neighbours = NEIGHBOURS
-        this.tilesSetup = gameObject.discs
+        this.discs = gameObject.discs
         this.players = gameObject.players
 
         this.drawBackground = false
         this.cheatArray = []
-        this.gameHistory = [,]
+        this.gameHistory = []
     }
 
     getPlayerTurn() {
@@ -26,42 +27,33 @@ class Game {
 
     setup() {
         this.background.setup();
-        this.pushTile(0, 250, 250)
+        this.discs.forEach(d => {
+            this.tiles.push(new Tile(d.x * 120 + (d.y * -60) + 500, d.y * 100 + 500, 80, d))
+            if (this.players[0].tokens.some(t => t.tile.x === d.x && t.tile.y === d.y)) {
+                this.playerTiles.push(new Tile(d.x * 120 + (d.y * -60) + 500, d.y * 100 + 500, 60, d, 'p1'))
+
+            }
+            if (this.players[1].tokens.some(t => t.tile.x === d.x && t.tile.y === d.y)) {
+                this.playerTiles.push(new Tile(d.x * 120 + (d.y * -60) + 500, d.y * 100 + 500, 60, d, 'p2'))
+            }
+        })
     }
 
     draw() {
+        clear()
         if (this.drawBackground) {
             this.background.draw();
         }
-        this.tiles.forEach((tile, i) => {
-            tile.draw();
-
-            if (this.hoverCheck(tile, mouseX, mouseY)) {
-                tile.hovering = true
-            } else {
-                tile.hovering = false
-            }
-        });
         this.hud.draw()
-    }
-    pushTile(id, x, y) {
-        const t = this.tilesSetup[id].neighbours
-        this.drawnTiles.push(id)
-        if (this.players[0].tokens.some(t => t.tile === id)) {
-            this.tiles.push(new Tile(x, y, 60, this.tilesSetup[id], 'p1'))
-            return
-        }
-        if (this.players[1].tokens.some(t => t.tile === id)) {
-            this.tiles.push(new Tile(x, y, 60, this.tilesSetup[id], 'p2'))
-            return
-        }
-        this.tiles.push(new Tile(x, y, 80, this.tilesSetup[id]))
+        this.tiles.forEach(tile => {
+            tile.draw();
+        });
+        this.playerTiles.forEach(tile => {
 
-        Object.keys(t).forEach(d => {
-            if (!this.drawnTiles.includes(t[d])) {
-                this.pushTile(t[d], this.neighbours[d].x(x), this.neighbours[d].y(y))
-            }
+            tile.hovering = this.hoverCheck(tile, mouseX, mouseY)
+            tile.draw()
         })
+        text(`${mouseX.toFixed(2)}   ${mouseY.toFixed(2)}`, mouseX, mouseY)
     }
 
     cheatCode(key) {
@@ -93,19 +85,11 @@ class Game {
     }
 
     hoverCheck(tile, mX, mY) {
-        const playerTurnIndex = this.getPlayerTurnIndex()
-        const tileId = tile.tileInfo.id
-        const r = 35 // or 40
-
-        if (tile.x - r < mX // left
-            && tile.x + r > mX // right
-            && tile.y - r < mY // top 
-            && tile.y + r > mY) { // bottom
-            if (this.players[playerTurnIndex].tokens.some(t => t.tile === tileId)) {
-                return true
-            }
+        if (this.getPlayerTurn() !== tile.player) {
+            return false;
         }
-        return false
+        const delta = Math.sqrt((mX - tile.x) ** 2 + (mY - tile.y) ** 2)
+        return delta < tile.d / 2
     }
 
     // not dry

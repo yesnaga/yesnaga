@@ -8,7 +8,7 @@ class Tile {
             p1: '#F79B18',
             p2: '#00ADEF',
         }
-        this.colorIndicator = player //enum: ['p1','p2']
+        this.player = player //enum: ['p1','p2']
         this.hovering = false
 
         this.debug = true
@@ -19,10 +19,11 @@ class Tile {
     }
     draw() {
 
-        if (this.colorIndicator) { // check if tile is owned by player
+
+        if (this.player) { // check if tile is owned by player
             fill("#e5e5e5");
             ellipse(this.x, this.y, this.d + 20);
-            fill(this.colors[this.colorIndicator]);
+            fill(this.colors[this.player]);
             const hoverValue = this.hovering ? 10 : 0
             const clickValue = this.clicked ? 10 : 0
             ellipse(this.x, this.y, this.d + hoverValue + clickValue);
@@ -37,6 +38,7 @@ class Tile {
             fill('black')
             textSize(20)
             text(`ID:${this.tileInfo.id}`, this.x - 25, this.y + 5)
+            text(this.hovering.toString(), this.x - 25, this.y + 25)
         }
     }
 }

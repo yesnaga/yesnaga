@@ -193,7 +193,7 @@ const players = {
 };
 
 function setup() {
-	createCanvas(1000, 600);
+	createCanvas(1920, 1600);
 	background(100, 200, 100);
 	noLoop();
 }

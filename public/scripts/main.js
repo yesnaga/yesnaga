@@ -1,19 +1,19 @@
 
 let game;
-const initGame = async () => {
-    const response = await getBoard()
-    game = new Game(response)
-}
-initGame()
 
+function preload() {
+    const response = loadJSON('/api/board', result => {
+        game = new Game(result)
+    })
+}
 
 function setup() {
-    createCanvas(1000, 600);
-    game.setup();
+    createCanvas(1920, 1600);
+    game.setup()
 }
 
 function draw() {
-    game.draw();
+    game.draw()
 }
 
 function keyPressed() {
