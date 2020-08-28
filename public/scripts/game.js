@@ -12,7 +12,9 @@ class Game {
 
 		this.drawBackground = false;
 		this.cheatArray = [];
-		this.gameHistory = [];
+		this.gameHistory = gameObject.gameHistory || [];
+
+		this.errorMsg = null;
 
 		gameObject.discs.forEach((d) => {
 			this.discs.push(new Disc(d.x * 120 + (d.y * -60) + 500, d.y * 100 + 500, 80, d));
@@ -41,12 +43,17 @@ class Game {
 		}
 		this.hud.draw();
 		this.discs.forEach((disc) => {
+			disc.hovering = this.discHoverCheck(disc, mouseX, mouseY);
 			disc.draw();
 		});
 		this.tokens.forEach((token) => {
-			token.hovering = this.hoverCheck(token, mouseX, mouseY);
+			token.hovering = this.tileHoverCheck(token, mouseX, mouseY);
 			token.draw();
 		});
+		if (this.errorMsg) {
+			fill('tomato');
+			text(`${JSON.stringify(this.errorMsg)}`, 25, 150);
+		}
 		// text(`${mouseX.toFixed(2)}   ${mouseY.toFixed(2)}`, mouseX, mouseY);
 	}
 
@@ -78,7 +85,7 @@ class Game {
 		}, 3000);
 	}
 
-	hoverCheck(tile, mX, mY) {
+	tileHoverCheck(tile, mX, mY) {
 		if (this.getPlayerTurn() !== tile.player) {
 			return false;
 		}
@@ -86,15 +93,47 @@ class Game {
 		return delta < tile.d / 2;
 	}
 
-	// not dry
-	// reuse hover function somehow!
-	clickTile(e) {
+	discHoverCheck(tile, mX, mY) {
+		const delta = Math.sqrt((mX - tile.x) ** 2 + (mY - tile.y) ** 2);
+		return delta < tile.d / 2;
+	}
+
+	resetClick() {
 		for (const tile of this.tokens) {
 			tile.clicked = false;
 		}
 		for (const disc of this.discs) {
 			disc.previewMode = false;
 		}
+	}
+
+	checkLegalMove(token, disc) {
+		return token.tokenInfo.moveableTo.some((legalMoves) => legalMoves.id === disc.discInfo.id);
+	}
+
+
+	clickTile(e) {
+		const clickedToken = this.tokens.find((t) => t.clicked);
+		const nextDiscPosition = this.discs.find((d) => d.hovering);
+
+		// checks if player is trying to make a move and validates it (and makes move if legal)
+		if (clickedToken && nextDiscPosition && this.checkLegalMove(clickedToken, nextDiscPosition)) {
+			makeMove(this.tokens, this.discs, this.gameHistory, clickedToken, nextDiscPosition)
+				.then((result) => {
+					// console.log(result, 'result')
+					// createNewGameWithNewResult()
+				})
+				.catch((error) => {
+					console.log(error);
+					this.errorMsg = error;
+
+					// draws error message in nice color
+					setTimeout(() => {
+						this.errorMsg = null;
+					}, 5000);
+				});
+		}
+		this.resetClick();
 
 		const token = this.tokens.find((t) => t.hovering);
 
@@ -110,3 +149,22 @@ class Game {
 		}
 	}
 }
+
+
+const makeMove = async (tokens, discs, gameHistory, clickedToken, nextDiscPosition) => {
+	const body = {
+		tokens, discs, gameHistory, clickedToken, nextDiscPosition,
+	};
+	let response;
+	try {
+		response = await fetch('api/move', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8',
+			},
+			body: JSON.stringify(body),
+		});
+	} catch (e) {
+		throw e;
+	}
+};

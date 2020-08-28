@@ -5,7 +5,7 @@ class Disc {
 		this.d = d;
 		this.discInfo = discInfo;
 
-
+		this.hovering = false;
 		this.debug = true;
 		this.previewMode = false;
 	}
@@ -21,6 +21,9 @@ class Disc {
 
 	draw() {
 		fill('#e5e5e5');
+		/* if (this.hovering) {
+			fill('#7fff00');
+		} */
 		if (this.previewMode) {
 			fill('#7fff00');
 		}
