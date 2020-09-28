@@ -7,8 +7,7 @@ module.exports = (router) => {
 	});
 
 	router.put('/games', (req, res, next) => {
-		const game = new Game(req.body);
-		game.save();
+		const game = Game.createNew(req.body);
 		return res.json(game.toObject());
 	});
 
