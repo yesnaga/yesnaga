@@ -6,9 +6,17 @@ const { BoardFactory } = require('../../lib/BoardFactory');
 const { ApplicationError } = require('../../lib/Errors');
 
 const initGameRoutes = require('./game');
+const initMoveRoutes = require('./move');
 
 const router = express.Router();
+
+router.use((req, res, next) => {
+	res.locals.pid = '3gj9DLW9yQGIA2lU0BaW_';
+	next();
+});
+
 initGameRoutes(router);
+initMoveRoutes(router);
 
 router.get('/board', (req, res) => {
 	res.json(BoardFactory.toObject(new Board()));
