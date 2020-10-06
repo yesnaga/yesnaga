@@ -52,7 +52,7 @@ class Game {
 		});
 		if (this.errorMsg) {
 			fill('tomato');
-			text(`${JSON.stringify(this.errorMsg)}`, 25, 150);
+			text(`${this.errorMsg}`, 25, 150);
 		}
 		// text(`${mouseX.toFixed(2)}   ${mouseY.toFixed(2)}`, mouseX, mouseY);
 	}
@@ -123,15 +123,7 @@ class Game {
 					// console.log(result, 'result')
 					// createNewGameWithNewResult()
 				})
-				.catch((error) => {
-					console.log(error);
-					this.errorMsg = error;
-
-					// draws error message in nice color
-					setTimeout(() => {
-						this.errorMsg = null;
-					}, 5000);
-				});
+				.catch(errorHandler);
 		}
 		this.resetClick();
 
@@ -168,3 +160,12 @@ const makeMove = async (tokens, discs, gameHistory, clickedToken, nextDiscPositi
 		throw e;
 	}
 };
+
+const errorHandler = error => {
+	console.error(`Error occured: ${error}`)
+	Game.errorMsg = error
+	setTimeout(() => {
+		Game.errorMsg = null;
+	}, 5000);
+	// throw error
+}
