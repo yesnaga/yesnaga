@@ -16,10 +16,7 @@ router.post('/board', (req, res) => {
 
 // move made by user are sent here, verified and updated
 router.post('/move', (req, res) => {
-	console.log(req.body, "here's your data");
-	// Verify move
-	// const newBoard = createNewGame(req.body)
-	// res.render('board', newBoard)
+	return res.json(BoardFactory.toObject(new Board());
 });
 
 module.exports = router;
