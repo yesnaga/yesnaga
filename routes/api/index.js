@@ -28,6 +28,11 @@ router.post('/board', (req, res) => {
 	return res.json({ foo });
 });
 
+// move made by user are sent here, verified and updated
+router.post('/move', (req, res) => {
+	return res.json(BoardFactory.toObject(new Board());
+});
+
 router.use((err, req, res, next) => {
 	if (err instanceof ApplicationError) {
 		res.status(err.status()).json({

@@ -5,7 +5,7 @@ class Disc {
 		this.d = d;
 		this.discInfo = discInfo;
 
-
+		this.hovering = false;
 		this.debug = true;
 		this.previewMode = false;
 	}

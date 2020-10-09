@@ -22,10 +22,10 @@ const getBoard = async () => {
 		})
 		.then((data) => data)
 		.catch(errHandler);
-	return await response;
+	return response;
 };
 
-const updateBoard = (body = 42) => {
+const updateBoard = (body) => {
 	fetch('/api/board', {
 		method: 'POST',
 		body: JSON.stringify({ body }),
