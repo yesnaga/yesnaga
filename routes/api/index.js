@@ -1,8 +1,5 @@
 const express = require('express');
 
-const { Board } = require('../../lib/Board');
-const { BoardFactory } = require('../../lib/BoardFactory');
-
 const { ApplicationError } = require('../../lib/Errors');
 
 const { Game } = require('../../lib/Game');
