@@ -13,6 +13,6 @@ module.exports = (router) => {
 
 	router.get('/games/:pid', (req, res, next) => {
 		const game = Game.getByPid(req.params.pid);
-		return res.json(game);
+		return res.json(game.toObject());
 	});
 };

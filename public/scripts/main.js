@@ -1,7 +1,8 @@
 let game;
 
 function preload() {
-	const response = loadJSON('/api/board', (result) => {
+	// todo: somehow select the game or create a new one to get a real pid
+	loadJSON('/api/games/3gj9DLW9yQGIA2lU0BaW_', (result) => {
 		game = new Game(result);
 	});
 }

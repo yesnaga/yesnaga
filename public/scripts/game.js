@@ -1,25 +1,26 @@
 class Game {
-	constructor(gameObject) {
+	constructor(data) {
 		this.background = new Background();
-		this.hud = new Hud([,]);
 		this.drawBackground = false;
 		this.cheatArray = [];
-		this.gameHistory = gameObject.gameHistory || [];
+		this.gameHistory = data.gameHistory || [];
 		this.errorMsg = null;
 		this.debug = false;
+		this.players = data.players;
 
-		this.replaceBoard(gameObject)
+		this.replaceBoard(data.gamestate.board);
+		this.hud = new Hud(this);
 	}
 
 	replaceBoard(board) {
 		this.tokens = [];
 		this.discs = [];
-		this.players = board.players;
+		this.playerTokens = board.players;
 
 		board.discs.forEach((d) => {
 			this.discs.push(new Disc(d.x * 120 + (d.y * -60) + 500, d.y * 100 + 500, 80, d));
 
-			this.players.forEach((player) => {
+			this.playerTokens.forEach((player) => {
 				const token = player.tokens.find((t) => t.tile.x === d.x && t.tile.y === d.y);
 				if (token) {
 					this.tokens.push(new Token(d.x * 120 + (d.y * -60) + 500, d.y * 100 + 500, 60, token, parseInt(player.id, 10)));

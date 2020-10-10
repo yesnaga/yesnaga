@@ -1,23 +1,20 @@
 class Hud {
-	constructor(gameHistory) {
-		this.gameHistory = gameHistory;
-		this.playerInformation = [
-			{
-				color: '#F79B18',
-				name: 'Max',
-			},
-			{
-				color: '#00ADEF',
-				name: 'Tor',
-			},
+	constructor(game) {
+		this.game = game;
+		this.playerInformation = this.game.players.map((name, index) => ({
+			name,
+			color: Hud.colors()[index % Hud.colors().length],
+		}));
+	}
 
+	static colors() {
+		return [
+			'#F79B18',
+			'#00ADEF',
 		];
 	}
 
-
-	setup() {
-		console.log('Hud setup');
-	}
+	setup() {}
 
 	draw() {
 		textSize(20);
