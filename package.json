@@ -18,7 +18,9 @@
 		"helmet": "^3.21.2",
 		"http-errors": "~1.6.3",
 		"morgan": "~1.9.1",
-		"pug": "^2.0.4"
+		"nanoid": "^3.1.12",
+		"pug": "^2.0.4",
+		"quick.db": "^7.1.2"
 	},
 	"devDependencies": {
 		"eslint": "^6.8.0",
