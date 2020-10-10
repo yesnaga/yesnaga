@@ -6,8 +6,6 @@ class Token {
 		this.tokenInfo = tokenInfo;
 		this.player = player; // enum: ['p1','p2']
 
-		this.debug = true;
-
 		this.hovering = false;
 		this.clicked = false;
 	}
@@ -32,7 +30,7 @@ class Token {
 		strokeWeight(1);
 
 		// debug
-		if (this.debug) {
+		if (game.debug) {
 			fill('black');
 			textSize(20);
 			text(`P${this.player}`, this.x - 25, this.y + 5);

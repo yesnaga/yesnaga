@@ -6,14 +6,12 @@ class Disc {
 		this.discInfo = discInfo;
 
 		this.hovering = false;
-		this.debug = true;
 		this.previewMode = false;
 	}
 
 	static colors() {
 		return ['#F79B18', '#00ADEF'];
 	}
-
 
 	setup() {
 		return false;
@@ -26,9 +24,8 @@ class Disc {
 		}
 		ellipse(this.x, this.y, this.d);
 
-
 		// debug
-		if (this.debug) {
+		if (game.debug) {
 			fill('black');
 			textSize(20);
 			text(`ID:${this.discInfo.id}`, this.x - 25, this.y + 5);

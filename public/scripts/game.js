@@ -2,21 +2,21 @@ class Game {
 	constructor(gameObject) {
 		this.background = new Background();
 		this.hud = new Hud([,]);
-		// filled with Tile-classes
-		// filled with ids of already existing tiles
-		this.tokens = [];
-
-		this.discs = [];
-
-		this.players = gameObject.players;
-
 		this.drawBackground = false;
 		this.cheatArray = [];
 		this.gameHistory = gameObject.gameHistory || [];
-
 		this.errorMsg = null;
+		this.debug = false;
 
-		gameObject.discs.forEach((d) => {
+		this.replaceBoard(gameObject)
+	}
+
+	replaceBoard(board) {
+		this.tokens = [];
+		this.discs = [];
+		this.players = board.players;
+
+		board.discs.forEach((d) => {
 			this.discs.push(new Disc(d.x * 120 + (d.y * -60) + 500, d.y * 100 + 500, 80, d));
 
 			this.players.forEach((player) => {
@@ -118,10 +118,11 @@ class Game {
 
 		// checks if player is trying to make a move and validates it (and makes move if legal)
 		if (clickedToken && nextDiscPosition && this.checkLegalMove(clickedToken, nextDiscPosition)) {
-			makeMove(this.tokens, this.discs, this.gameHistory, clickedToken, nextDiscPosition)
+			makeMove(clickedToken, nextDiscPosition)
 				.then((result) => {
-					// console.log(result, 'result')
-					// createNewGameWithNewResult()
+					if (result) {
+						this.replaceBoard(result)
+					}
 				})
 				.catch(errorHandler);
 		}
@@ -143,19 +144,29 @@ class Game {
 }
 
 
-const makeMove = async (tokens, discs, gameHistory, clickedToken, nextDiscPosition) => {
-	const body = {
-		tokens, discs, gameHistory, clickedToken, nextDiscPosition,
-	};
+const makeMove = async (clickedToken, nextDiscPosition) => {
+	const from = {
+		x: clickedToken.tokenInfo.tile.x,
+		y: clickedToken.tokenInfo.tile.y
+	}
+	const to = {
+		x: nextDiscPosition.discInfo.x,
+		y: nextDiscPosition.discInfo.y
+	}
 	let response;
 	try {
-		response = await fetch('api/move', {
+		response = await fetch('api/moveToken', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json;charset=utf-8',
 			},
-			body: JSON.stringify(body),
+			body: JSON.stringify({ from, to }),
 		});
+		const body = await response.json()
+		if (response.status === 200) {
+			return body.gamestate.board
+		}
+		return errorHandler(body.message)
 	} catch (e) {
 		throw e;
 	}
@@ -163,9 +174,9 @@ const makeMove = async (tokens, discs, gameHistory, clickedToken, nextDiscPositi
 
 const errorHandler = error => {
 	console.error(`Error occured: ${error}`)
-	Game.errorMsg = error
+	game.errorMsg = error
 	setTimeout(() => {
-		Game.errorMsg = null;
+		game.errorMsg = null;
 	}, 5000);
 	// throw error
 }

@@ -5,6 +5,8 @@ const { BoardFactory } = require('../../lib/BoardFactory');
 
 const { ApplicationError } = require('../../lib/Errors');
 
+const { Game } = require('../../lib/Game');
+
 const initGameRoutes = require('./game');
 const initMoveRoutes = require('./move');
 
@@ -19,18 +21,8 @@ initGameRoutes(router);
 initMoveRoutes(router);
 
 router.get('/board', (req, res) => {
-	res.json(BoardFactory.toObject(new Board()));
-});
-
-// test route
-router.post('/board', (req, res) => {
-	const foo = req.body.body;
-	return res.json({ foo });
-});
-
-// move made by user are sent here, verified and updated
-router.post('/move', (req, res) => {
-	return res.json(BoardFactory.toObject(new Board());
+	const game = Game.getByPid(res.locals.pid);
+	return res.json(game.toObject().gamestate.board);
 });
 
 router.use((err, req, res, next) => {
