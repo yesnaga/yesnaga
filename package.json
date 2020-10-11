@@ -12,10 +12,10 @@
 		"test": "jest"
 	},
 	"dependencies": {
-		"cookie-parser": "~1.4.4",
+		"cookie-parser": "^1.4.5",
 		"debug": "~2.6.9",
 		"express": "~4.16.1",
-		"helmet": "^3.21.2",
+		"helmet": "^3.23.3",
 		"http-errors": "~1.6.3",
 		"morgan": "~1.9.1",
 		"nanoid": "^3.1.12",
@@ -25,8 +25,8 @@
 	"devDependencies": {
 		"eslint": "^6.8.0",
 		"eslint-config-airbnb-base": "^13.0.0",
-		"eslint-plugin-import": "^2.18.2",
-		"jest": "^26.2.2",
+		"eslint-plugin-import": "^2.22.1",
+		"jest": "^26.5.2",
 		"nodemon": "^2.0.4"
 	}
 }
