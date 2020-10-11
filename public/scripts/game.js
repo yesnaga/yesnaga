@@ -21,10 +21,15 @@ class Game {
 	replaceBoard(board) {
 		this.tokens = [];
 		this.discs = [];
+		this.ghostDiscs = []
 		this.playerTokens = board.players;
+
+		const tempGhostDiscs = []
 
 		board.discs.forEach((d) => {
 			this.discs.push(new Disc(d.x * 120 + (d.y * -60) + 500, d.y * 100 + 500, 80, d));
+
+			d.moveableTo.forEach(ghostDisc => tempGhostDiscs.push(new GhostDisc(ghostDisc.x * 120 + (ghostDisc.y * -60) + 500, ghostDisc.y * 100 + 500, 80, ghostDisc)))
 
 			this.playerTokens.forEach((player) => {
 				const token = player.tokens.find((t) => t.tile.x === d.x && t.tile.y === d.y);
@@ -33,6 +38,8 @@ class Game {
 				}
 			});
 		});
+		const uniqueGhostDiscs = new Set(tempGhostDiscs.map(gh => JSON.stringify(gh)));
+		this.ghostDiscs = Array.from(uniqueGhostDiscs).map(ghostDisc => JSON.parse(ghostDisc))
 	}
 
 	getPlayerTurn() {
