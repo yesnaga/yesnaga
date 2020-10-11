@@ -8,8 +8,14 @@ class Game {
 		this.debug = false;
 		this.players = data.players;
 
+		// temp variable
+		this.phase = /* data.gamestate.phase || */ 'mid_move' // enum: ["mid_move", "initial"]
 		this.replaceBoard(data.gamestate.board);
 		this.hud = new Hud(this);
+	}
+
+	setPhase(phase) {
+		this.phase = phase
 	}
 
 	replaceBoard(board) {
@@ -104,6 +110,7 @@ class Game {
 			tile.clicked = false;
 		}
 		for (const disc of this.discs) {
+			disc.clicked = false;
 			disc.previewMode = false;
 		}
 	}
@@ -123,6 +130,7 @@ class Game {
 				.then((result) => {
 					if (result) {
 						this.replaceBoard(result)
+						// this.setPhase(result)
 					}
 				})
 				.catch(errorHandler);
@@ -130,6 +138,7 @@ class Game {
 		this.resetClick();
 
 		const token = this.tokens.find((t) => t.hovering);
+		const disc = this.discs.find((d) => d.hovering)
 
 		if (token) {
 			token.clicked = !token.clicked;
@@ -140,6 +149,10 @@ class Game {
 					targetDisc.previewMode = true;
 				}
 			});
+		}
+
+		if (disc && this.phase === 'mid_move') {
+			disc.clicked = !disc.clicked;
 		}
 	}
 }

@@ -14,7 +14,7 @@ class Hud {
 		];
 	}
 
-	setup() {}
+	setup() { }
 
 	draw() {
 		textSize(20);
