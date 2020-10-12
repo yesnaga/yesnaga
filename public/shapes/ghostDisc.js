@@ -5,20 +5,19 @@ class GhostDisc {
         this.d = d;
         this.discInfo = discInfo;
 
-        this.clicked = false;
+        //this.clicked = false;
         this.hovering = false;
         this.display = false
     }
-    // uneeded variables?
-    /* static colors() {
-        return ['#F79B18', '#00ADEF'];
-    } */
 
     draw() {
-        if (!this.display) {
-            fill('rgba(225, 225, 225, 0.2)')
+        if (this.display) {
+            fill('rgba(220, 220, 220, 0.24)')
+            if (!this.hovering) {
+                noStroke()
+            }
             ellipse(this.x, this.y, this.d);
+            stroke('black')
         }
-
     }
 }

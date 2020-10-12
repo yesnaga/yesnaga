@@ -8,13 +8,13 @@ class Game {
 		this.debug = false;
 		this.players = data.players;
 
-		// temp variable
-		this.phase = /* data.gamestate.phase || */ 'mid_move' // enum: ["mid_move", "initial"]
+		this.setPhase(data.gamestate.phase)
 		this.replaceBoard(data.gamestate.board);
 		this.hud = new Hud(this);
 	}
 
-	setPhase(phase) {
+	setPhase(phase = 'initial') {
+		// Enum: ['intial', 'mid_move']
 		this.phase = phase
 	}
 
@@ -67,6 +67,7 @@ class Game {
 		});
 		if (this.phase === 'mid_move') {
 			this.ghostDiscs.forEach((ghostDisc) => {
+				ghostDisc.hovering = this.ghostDiscHoverCheck(ghostDisc, mouseX, mouseY);
 				ghostDisc.draw();
 			})
 		}
@@ -106,7 +107,7 @@ class Game {
 	}
 
 	tileHoverCheck(tile, mX, mY) {
-		if (this.getPlayerTurn() !== tile.player) {
+		if (this.getPlayerTurn() !== tile.player || this.phase !== 'initial') {
 			return false;
 		}
 		const delta = Math.sqrt((mX - tile.x) ** 2 + (mY - tile.y) ** 2);
@@ -118,6 +119,11 @@ class Game {
 		return delta < tile.d / 2;
 	}
 
+	ghostDiscHoverCheck(tile, mX, mY) {
+		const delta = Math.sqrt((mX - tile.x) ** 2 + (mY - tile.y) ** 2);
+		return delta < tile.d / 2;
+	}
+
 	resetClick() {
 		for (const tile of this.tokens) {
 			tile.clicked = false;
@@ -125,6 +131,9 @@ class Game {
 		for (const disc of this.discs) {
 			disc.clicked = false;
 			disc.previewMode = false;
+		}
+		for (const ghostDisc of this.ghostDiscs) {
+			ghostDisc.display = false
 		}
 	}
 
@@ -142,8 +151,8 @@ class Game {
 			makeMove(clickedToken, nextDiscPosition)
 				.then((result) => {
 					if (result) {
-						this.replaceBoard(result)
-						// this.setPhase(result)
+						this.replaceBoard(result.gamestate.board)
+						this.setPhase(result.gamestate.phase)
 					}
 				})
 				.catch(errorHandler);
@@ -163,9 +172,15 @@ class Game {
 				}
 			});
 		}
-
-		if (disc && this.phase === 'mid_move') {
+		if (disc && disc.discInfo.moveable && this.phase === 'mid_move') {
 			disc.clicked = !disc.clicked;
+			disc.discInfo.moveableTo.forEach(moveableToDisc => {
+				const discToDisplay =
+					this.ghostDiscs.find(ghostDisc => {
+						return ghostDisc.discInfo.x === moveableToDisc.x && ghostDisc.discInfo.y === moveableToDisc.y
+					})
+				discToDisplay.display = true
+			})
 		}
 	}
 }
@@ -191,7 +206,7 @@ const makeMove = async (clickedToken, nextDiscPosition) => {
 		});
 		const body = await response.json()
 		if (response.status === 200) {
-			return body.gamestate.board
+			return body
 		}
 		return errorHandler(body.message)
 	} catch (e) {
