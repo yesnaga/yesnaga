@@ -7,6 +7,7 @@ class GhostDisc {
 
         this.clicked = false;
         this.hovering = false;
+        this.display = false
     }
     // uneeded variables?
     /* static colors() {
@@ -14,7 +15,10 @@ class GhostDisc {
     } */
 
     draw() {
-        fill('tomato');
+        if (!this.display) {
+            fill('rgba(225, 225, 225, 0.2)')
+            ellipse(this.x, this.y, this.d);
+        }
 
     }
 }
