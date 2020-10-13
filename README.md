@@ -2,20 +2,15 @@
 
 # YESNAGA
 
-## Built with
+## About
+Yesnaga is inspired by Nonaga, a board game created by [Viktor Bautista i Roca](https://twitter.com/viktorbir) and distributed by Steffen Spiele.
 
-[P5js](https://p5js.org/)
+The game has a hexagonal playing area composed of 19 discs, with each player having three moveable tokens, that start in alternating vertices around the hexagon. Every turn, a player must do two things, in order:
 
-[Nodejs](https://nodejs.org/)
+- Move one of their tokens in a straight line up to the end of the board or up to colliding with another token
+- Move one of the exterior empty discs to another location on the playing area where it touches at least two discs.
 
-## About Yesnaga
-
-Yesnaga  has a hexagonal playing area composed of 19 rings, with each player having three pieces that start in alternating vertices around the hexagon. On a turn, a player must do two things, in order:
-
-- Move one of their pieces in a straight line up to the end of the board or up to colliding with another piece
-- Move one of the exterior empty rings to another location on the playing area where it touches two rings.
-
-Whoever first manages to connect their three pieces wins!
+Whoever first manages to connect their three tokens wins!
 
 ## Getting started
 
@@ -35,11 +30,11 @@ OR
 
 ### Running test
 
-``$npm run test``
+``$ npm test``
 
 ## License
 
-Distributed under the GNU License. See LICENSE for more information.
+Distributed under the GNU General Public License v3.0. See [LICENSE](./LICENSE) for more information.
 
 ## Contact
 
