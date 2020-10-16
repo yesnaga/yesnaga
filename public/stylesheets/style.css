@@ -1,16 +1,17 @@
+*{
+  margin:0;
+  padding:0
+}
+
+canvas{
+  margin-top: 2%;
+  margin-left: 2%;
+}
+
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
-}
-
-.debug-toggle {
-  display: inline;
-}
-
-.debug-toggle > label {
-  cursor: pointer;
 }

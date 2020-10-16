@@ -1,6 +1,8 @@
+
 let game;
 
 function preload() {
+	menu = new Menu()
 	// todo: somehow select the game or create a new one to get a real pid
 	loadJSON('/api/games/3gj9DLW9yQGIA2lU0BaW_', (result) => {
 		game = new Game(result);
@@ -21,5 +23,5 @@ function keyPressed() {
 	game.cheatCode(key);
 }
 function mouseClicked(e) {
-	game.clickTile(e);
+	game.mouseClicked(e);
 }

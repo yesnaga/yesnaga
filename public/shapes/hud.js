@@ -1,3 +1,8 @@
+const hints = {
+	initial: 'token',
+	mid_move: 'disc'
+}
+
 class Hud {
 	constructor(game) {
 		this.game = game;
@@ -14,9 +19,8 @@ class Hud {
 		];
 	}
 
-	setup() { }
-
 	draw() {
+		noStroke()
 		textSize(20);
 		fill('#BBB');
 		text('Player turn:', 25, 30);
@@ -25,5 +29,13 @@ class Hud {
 		fill(this.playerInformation[currentPlayer].color);
 		text(this.playerInformation[currentPlayer].name, 25, 60);
 		ellipse(10, 50, 15);
+
+		// draws hints in start phase
+		if (game.gameHistory.length < 3) {
+			fill('#BBB');
+			textSize(map(sin(frameCount * 0.02), -20, 1, 45, 25));
+			text(`Move a ${hints[game.phase]}`, 25, 120)
+		}
+		stroke("black")
 	}
 }
