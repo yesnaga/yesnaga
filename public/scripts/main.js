@@ -25,6 +25,8 @@ function draw() {
 
 function keyPressed() {
 	game.cheatCode(key);
+	menu.keyPressed(key)
+	return false
 }
 function mouseClicked(e) {
 	menu.mouseClicked(e)
