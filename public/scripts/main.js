@@ -1,5 +1,7 @@
 
+
 let game;
+let menu;
 
 function preload() {
 	menu = new Menu()
@@ -12,11 +14,13 @@ function preload() {
 function setup() {
 	createCanvas(1200, 1000);
 	//frameRate(20)
+	menu.setup()
 	game.setup();
 }
 
 function draw() {
-	game.draw();
+	//game.draw();
+	menu.draw()
 }
 
 function keyPressed() {
@@ -25,3 +29,4 @@ function keyPressed() {
 function mouseClicked(e) {
 	game.mouseClicked(e);
 }
+
