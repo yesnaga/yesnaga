@@ -1,4 +1,4 @@
-const { Game } = require('../../lib/Game');
+const { Game } = require('../../lib/Game')();
 
 module.exports = (router) => {
 	router.get('/games', (req, res, next) => {

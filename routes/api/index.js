@@ -2,7 +2,7 @@ const express = require('express');
 
 const { ApplicationError } = require('../../lib/Errors');
 
-const { Game } = require('../../lib/Game');
+const { Game } = require('../../lib/Game')();
 
 const initGameRoutes = require('./game');
 const initMoveRoutes = require('./move');
