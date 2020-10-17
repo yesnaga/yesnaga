@@ -14,7 +14,7 @@ LICENSE
 node_modules
 coverage
 
-*.test.js
-*.mock.js
+**/*.test.js
+**/*.mock.js
 
 json.sqlite
