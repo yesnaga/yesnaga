@@ -17,7 +17,7 @@ class Menu {
     }
 
     drawTitle() {
-        text('NONAGA', 100, 100)
+        text('YESNAGA', 100, 100)
     }
     drawInstructions() {
         text('Instructions: xyz', 200, 200)
