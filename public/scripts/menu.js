@@ -12,38 +12,41 @@ const newGameOptionsItems = {
     player1: {
         color: '#F79B18',
         textAndPosition: ['Player 1', 350, 180],
-        inputPosition: {
+        position: {
             x: 300,
             y: 200,
             width: 250,
             height: 60,
         },
+        click: () => menu.textSelectAtPlayer1 = true
     },
     player2: {
         color: '#00ADEF',
         textAndPosition: ['Player 2', 650, 180],
-        inputPosition: {
+        position: {
             x: 600,
             y: 200,
             width: 250,
             height: 60,
         },
+        click: () => menu.textSelectAtPlayer1 = false
     },
     confirmButton: {
         color: 'green',
         textAndPosition: [`LOS GEHT'S!`, 575, 320],
-        buttonPosition: {
+        position: {
             x: 475,
             y: 300,
             width: 200,
             height: 60
-        }
+        },
+        click: () => createGame(menu.player1, menu.player2)
     }
 }
 
 class Menu {
     constructor() {
-        this.pid = ''
+        this.pid = localStorage.getItem('yesnaga_pid') || '';
         this.showInstructions = false
         this.showNewGameOptions = false
         this.textSelectAtPlayer1 = true
@@ -86,7 +89,7 @@ class Menu {
                 textSize: width / 14,
                 allowHovering: !!this.pid,
                 click: () => {
-                    console.log('continue game')
+                    continueGame(this.pid)
                 }
             },
             instructions: {
@@ -123,15 +126,18 @@ class Menu {
 
     }
     mouseClicked(event) {
+        if (this.showNewGameOptions) {
+            const currentGameOption = Object.keys(newGameOptionsItems).find(gameOption => {
+                return hoveringGameOption(newGameOptionsItems[gameOption])
+            })
+
+            if (currentGameOption) newGameOptionsItems[currentGameOption].click()
+            return
+        }
         const currentMenuItem = Object.keys(this.menuItems).find(menuItem => {
             return hoveringMenuItemCheck(this.menuItems[menuItem], event)
         })
-        if (currentMenuItem) {
-            this.menuItems[currentMenuItem].click()
-        }
-        if (this.showNewGameOptions) {
-
-        }
+        if (currentMenuItem) this.menuItems[currentMenuItem].click()
     }
     hideAllMenuItems(exception = '') {
         this.showInstructions = false
@@ -142,6 +148,8 @@ class Menu {
     keyPressed(key) {
         // ignores all input if the input fields are now visibles
         if (!this.showNewGameOptions) {
+            // allows for quickly getting back into the game
+            if (key === 'Enter') continueGame(this.pid)
             return
         }
 
@@ -152,7 +160,7 @@ class Menu {
                 break;
             // shortcut to start the game
             case 'Enter':
-                console.log('starting game')
+                createGame(this.player1, this.player2)
             // Allows the player to redifine the name
             case 'Backspace':
                 if (this.textSelectAtPlayer1) {
@@ -174,6 +182,14 @@ class Menu {
     }
 }
 
+const hoveringGameOption = (gameOption) => {
+    const { position } = gameOption
+    return position.y < mouseY
+        && position.y + position.height > mouseY
+        && position.x < mouseX
+        && position.x + position.width > mouseX
+}
+
 const hoveringMenuItemCheck = (menuItem, event = { pageY: mouseY + 30, pageX: mouseX + 30 }) => {
     const [verticalOffset, horizontalOffset] = [40, 490]
     const { pageY, pageX } = event
@@ -190,7 +206,6 @@ const drawContent = (menuItem) => {
     if (menuItem.hide) return;
     textSize(menuItem.textSize);
     textAlign(...menuItem.textAlign)
-
     fill(menuItem.hovering && menuItem.allowHovering ? 'orange' : menuItem.color)
     text(menuItem.content, menuItem.x, menuItem.y, width)
 }
@@ -213,9 +228,9 @@ const drawNewGameOptions = (player1Name, player2Name) => {
     }
 
     // confirmButton
-    const { buttonPosition } = newGameOptionsItems.confirmButton
+    const { position } = newGameOptionsItems.confirmButton
     fill(newGameOptionsItems.confirmButton.color)
-    rect(buttonPosition.x, buttonPosition.y, buttonPosition.width, buttonPosition.height, 20)
+    rect(position.x, position.y, position.width, position.height, 20)
     textSize(width / 60)
     fill('white')
     text(...newGameOptionsItems.confirmButton.textAndPosition)
@@ -226,10 +241,40 @@ const drawPlayerInput = (player, name) => {
     fill(player.color)
     text(...player.textAndPosition)
     fill('white')
-    const { inputPosition } = player
-    rect(inputPosition.x, inputPosition.y, inputPosition.width, inputPosition.height, 20)
+    const { position } = player
+    rect(position.x, position.y, position.width, position.height, 20)
     fill('black')
     textAlign(LEFT)
-    text(name, inputPosition.x + 20, inputPosition.y + 20)
+    text(name, position.x + 20, position.y + 20)
     textAlign(CENTER)
+}
+
+
+const continueGame = pid => {
+    if (!pid) return
+
+    fetch(`api/games/${pid}`, { method: 'GET', })
+        .then(result => result.json())
+        .then(formattedResult => {
+            game = new Game(formattedResult);
+        })
+        .catch(error => console.error('error', error));
+
+}
+
+const createGame = (player1Name, player2Name) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    const requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: JSON.stringify({ "players": [player1Name || 'orange', player2Name || 'blue'] }),
+    };
+
+    fetch("api/games", requestOptions)
+        .then(result => result.json())
+        .then(formattedResult => {
+            game = new Game(formattedResult);
+        })
+        .catch(error => console.error('error', error));
 }

@@ -20,6 +20,7 @@ class Hud {
 	}
 
 	draw() {
+		textAlign(LEFT)
 		noStroke()
 		textSize(20);
 		fill('#BBB');
@@ -28,7 +29,7 @@ class Hud {
 		const currentPlayer = game.getPlayerTurn();
 		fill(this.playerInformation[currentPlayer].color);
 		text(this.playerInformation[currentPlayer].name, 25, 60);
-		ellipse(10, 50, 15);
+		ellipse(140, 40, 15);
 
 		// draws hints in start phase
 		if (game.gameHistory.length < 3) {
