@@ -27,6 +27,7 @@ function keyPressed() {
 	game.cheatCode(key);
 }
 function mouseClicked(e) {
-	game.mouseClicked(e);
+	menu.mouseClicked(e)
+	//game.mouseClicked(e);
 }
 

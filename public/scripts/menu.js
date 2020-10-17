@@ -13,7 +13,6 @@ class Menu {
                 textAlign: [CENTER, TOP],
                 x: 0,
                 y: 70,
-                width: width,
                 textSize: width / 10
             },
             newGame: {
@@ -22,7 +21,6 @@ class Menu {
                 textAlign: [CENTER, TOP],
                 x: 0,
                 y: 270,
-                width: width,
                 textSize: width / 14
             },
             continueGame: {
@@ -31,7 +29,6 @@ class Menu {
                 textAlign: [CENTER, TOP],
                 x: 0,
                 y: 390,
-                width: width,
                 textSize: width / 14
             },
             instructions: {
@@ -40,7 +37,6 @@ class Menu {
                 textAlign: [CENTER, TOP],
                 x: 0,
                 y: 510,
-                width: width,
                 textSize: width / 14
             },
             /* instructionDetails: {
@@ -48,7 +44,6 @@ class Menu {
                 textAlign: [CENTER, TOP],
                 x: 0,
                 y: 100,
-                width: width,
                 textSize: width / 14
             } */
         }
@@ -60,15 +55,31 @@ class Menu {
         })
 
     }
-    mouseClick(e) {
+    mouseClicked(event) {
+        const currentMenuItem = Object.keys(this.menuItems).find(menuItem => {
+            return hoveringMenuItem(this.menuItems[menuItem], event)
+        })
+        console.log(currentMenuItem)
+
 
     }
-    // github link?
+}
+
+const hoveringMenuItem = (menuItem, event) => {
+    const [verticalOffset, horizontalOffset] = [40, 490]
+    const { pageY, pageX } = event
+    const [adjustedY, adjustedX] = [pageY - verticalOffset, pageX - horizontalOffset]
+
+    // TODO add horizontal check too
+    return adjustedY > menuItem.y
+        && adjustedY < menuItem.y + menuItem.textSize
+        && adjustedX > menuItem.x
+        && adjustedX < menuItem.x + width / 2
 }
 
 const drawContent = (menuItem) => {
     textSize(menuItem.textSize);
     textAlign(...menuItem.textAlign)
     fill(menuItem.color)
-    text(menuItem.content, menuItem.x, menuItem.y, menuItem.width)
+    text(menuItem.content, menuItem.x, menuItem.y, width)
 }
