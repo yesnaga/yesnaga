@@ -1,6 +1,6 @@
 /* const baseUrl = process.env.NODE_ENV === 'production'
-    ? '/api'
-    : `http://${window.location.hostname}:3000/api`
+	? '/api'
+	: `http://${window.location.hostname}:3000/api`
  */
 
 const errHandler = (err) => {
@@ -39,9 +39,6 @@ const updateBoard = (body) => {
 				return response.json();
 			}
 			throw new Error('Request failed.');
-		})
-		.then((data) => {
-			console.log(data, 'data');
 		})
 		.catch(errHandler);
 };

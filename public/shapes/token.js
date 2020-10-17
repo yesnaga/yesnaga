@@ -28,12 +28,5 @@ class Token {
 		}
 		ellipse(this.x, this.y, this.d);
 		strokeWeight(1);
-
-		// debug
-		if (game.debug) {
-			fill('black');
-			textSize(20);
-			text(`P${this.player}`, this.x - 25, this.y + 5);
-		}
 	}
 }

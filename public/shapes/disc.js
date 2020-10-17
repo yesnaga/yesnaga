@@ -5,17 +5,14 @@ class Disc {
 		this.d = d;
 		this.discInfo = discInfo;
 
+		this.clicked = false;
 		this.hovering = false;
 		this.previewMode = false;
 	}
-
-	static colors() {
+	// uneeded variables?
+	/* static colors() {
 		return ['#F79B18', '#00ADEF'];
-	}
-
-	setup() {
-		return false;
-	}
+	} */
 
 	draw() {
 		fill('#e5e5e5');
@@ -24,11 +21,17 @@ class Disc {
 		}
 		ellipse(this.x, this.y, this.d);
 
-		// debug
-		if (game.debug) {
-			fill('black');
-			textSize(20);
-			text(`ID:${this.discInfo.id}`, this.x - 25, this.y + 5);
+		if (game.phase === 'mid_move' && this.discInfo.moveable) {
+			const dotWeight = this.hovering || this.clicked ? 3.5 : 2
+			fill('black')
+			for (let i = 0; i < 3; i++) {
+				for (let j = 0; j < 2; j++) {
+					ellipse(this.x - 8 + i * 8, this.y - 2 + j * 8, dotWeight);
+				}
+			}
+			fill('#e5e5e5');
 		}
+
+
 	}
 }

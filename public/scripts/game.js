@@ -5,20 +5,35 @@ class Game {
 		this.cheatArray = [];
 		this.gameHistory = data.gameHistory || [];
 		this.errorMsg = null;
-		this.debug = false;
 		this.players = data.players;
+		this.winner = null
 
+		this.setPhase(data.gamestate.phase)
 		this.replaceBoard(data.gamestate.board);
-		this.hud = new Hud(this);
+		this.replaceHud(data)
+	}
+
+	replaceHud(data = this) {
+		this.hud = new Hud(data)
+	}
+
+	setPhase(phase = 'initial') {
+		// Enum: ['intial', 'mid_move']
+		this.phase = phase
 	}
 
 	replaceBoard(board) {
 		this.tokens = [];
 		this.discs = [];
+		this.ghostDiscs = []
 		this.playerTokens = board.players;
+
+		const uniqueGhostDiscs = new Set();
 
 		board.discs.forEach((d) => {
 			this.discs.push(new Disc(d.x * 120 + (d.y * -60) + 500, d.y * 100 + 500, 80, d));
+
+			d.moveableTo.forEach(ghostDisc => uniqueGhostDiscs.add(JSON.stringify(ghostDisc)))
 
 			this.playerTokens.forEach((player) => {
 				const token = player.tokens.find((t) => t.tile.x === d.x && t.tile.y === d.y);
@@ -27,6 +42,9 @@ class Game {
 				}
 			});
 		});
+		this.ghostDiscs = Array.from(uniqueGhostDiscs)
+			.map(ghostDisc => JSON.parse(ghostDisc))
+			.map(ghostDisc => new GhostDisc(ghostDisc.x * 120 + (ghostDisc.y * -60) + 500, ghostDisc.y * 100 + 500, 80, ghostDisc))
 	}
 
 	getPlayerTurn() {
@@ -51,6 +69,12 @@ class Game {
 			token.hovering = this.tileHoverCheck(token, mouseX, mouseY);
 			token.draw();
 		});
+		if (this.phase === 'mid_move') {
+			this.ghostDiscs.forEach((ghostDisc) => {
+				ghostDisc.hovering = this.ghostDiscHoverCheck(ghostDisc, mouseX, mouseY);
+				ghostDisc.draw();
+			})
+		}
 		if (this.errorMsg) {
 			fill('tomato');
 			text(`${this.errorMsg}`, 25, 150);
@@ -87,7 +111,7 @@ class Game {
 	}
 
 	tileHoverCheck(tile, mX, mY) {
-		if (this.getPlayerTurn() !== tile.player) {
+		if (this.getPlayerTurn() !== tile.player || this.phase !== 'initial') {
 			return false;
 		}
 		const delta = Math.sqrt((mX - tile.x) ** 2 + (mY - tile.y) ** 2);
@@ -99,53 +123,107 @@ class Game {
 		return delta < tile.d / 2;
 	}
 
+	ghostDiscHoverCheck(tile, mX, mY) {
+		const delta = Math.sqrt((mX - tile.x) ** 2 + (mY - tile.y) ** 2);
+		return delta < tile.d / 2;
+	}
+
 	resetClick() {
 		for (const tile of this.tokens) {
 			tile.clicked = false;
 		}
 		for (const disc of this.discs) {
+			disc.clicked = false;
 			disc.previewMode = false;
+		}
+		for (const ghostDisc of this.ghostDiscs) {
+			ghostDisc.display = false
 		}
 	}
 
-	checkLegalMove(token, disc) {
+	checkLegalTokenMove(token, disc) {
 		return token.tokenInfo.moveableTo.some((legalMoves) => legalMoves.id === disc.discInfo.id);
+	}
+	checkLegalDiscMove(disc, ghostDisc) {
+		return disc.discInfo.moveableTo.some((legalMoves) => legalMoves.x === ghostDisc.discInfo.x && legalMoves.y === ghostDisc.discInfo.y);
+	}
+
+	mouseClicked(e) {
+		const clickedToken = this.tokens.find((t) => t.clicked);
+		const hoveringToken = this.tokens.find((t) => t.hovering);
+		const hoveringDisc = this.discs.find((d) => d.hovering);
+		if (this.phase === 'initial') {
+			return this.mouseClickInitialPhase(clickedToken, hoveringDisc, hoveringToken)
+		}
+		const clickedDisc = this.discs.find((d) => d.clicked);
+		const ghostDisc = this.ghostDiscs.find((gd) => gd.hovering);
+
+		if (this.phase === 'mid_move') {
+			return this.mouseClickMidMovePhase(clickedDisc, hoveringDisc, ghostDisc)
+		}
 	}
 
 
-	clickTile(e) {
-		const clickedToken = this.tokens.find((t) => t.clicked);
-		const nextDiscPosition = this.discs.find((d) => d.hovering);
-
-		// checks if player is trying to make a move and validates it (and makes move if legal)
-		if (clickedToken && nextDiscPosition && this.checkLegalMove(clickedToken, nextDiscPosition)) {
-			makeMove(clickedToken, nextDiscPosition)
+	mouseClickInitialPhase(clickedToken, hoveringDisc, hoveringToken) {
+		if (clickedToken && hoveringDisc && this.checkLegalTokenMove(clickedToken, hoveringDisc)) {
+			makeTokenMove(clickedToken, hoveringDisc)
 				.then((result) => {
 					if (result) {
-						this.replaceBoard(result)
+						this.replaceBoard(result.gamestate.board)
+						this.setPhase(result.gamestate.phase)
+						this.replaceHud(result)
 					}
 				})
 				.catch(errorHandler);
 		}
+
 		this.resetClick();
 
-		const token = this.tokens.find((t) => t.hovering);
+		if (hoveringToken) {
+			hoveringToken.clicked = !hoveringToken.clicked;
 
-		if (token) {
-			token.clicked = !token.clicked;
-
-			token.tokenInfo.moveableTo.forEach((target) => {
+			hoveringToken.tokenInfo.moveableTo.forEach((target) => {
 				const targetDisc = this.discs.find((d) => d.discInfo.id === target.id);
 				if (targetDisc) {
 					targetDisc.previewMode = true;
 				}
 			});
 		}
+
+	}
+
+	mouseClickMidMovePhase(clickedDisc, hoveringDisc, ghostDisc) {
+		if (clickedDisc && ghostDisc && this.checkLegalDiscMove(clickedDisc, ghostDisc)) {
+			makeDiscMove(clickedDisc, ghostDisc)
+				.then((result) => {
+					if (result) {
+						this.replaceBoard(result.gamestate.board)
+						this.setPhase(result.gamestate.phase)
+						this.replaceHud(result)
+						// TODO: Fix following line.
+						this.gameHistory.push(result.gamestate.turn)
+					}
+				})
+				.catch(errorHandler);
+		}
+		this.resetClick();
+
+		if (hoveringDisc && hoveringDisc.discInfo.moveable) {
+			hoveringDisc.clicked = !hoveringDisc.clicked;
+			hoveringDisc.discInfo.moveableTo.forEach(moveableToDisc => {
+				const discToDisplay =
+					this.ghostDiscs.find(ghostDisc => {
+						return ghostDisc.discInfo.x === moveableToDisc.x && ghostDisc.discInfo.y === moveableToDisc.y
+					})
+				discToDisplay.display = true
+			})
+		}
+
 	}
 }
 
 
-const makeMove = async (clickedToken, nextDiscPosition) => {
+const makeTokenMove = async (clickedToken, nextDiscPosition) => {
 	const from = {
 		x: clickedToken.tokenInfo.tile.x,
 		y: clickedToken.tokenInfo.tile.y
@@ -165,7 +243,35 @@ const makeMove = async (clickedToken, nextDiscPosition) => {
 		});
 		const body = await response.json()
 		if (response.status === 200) {
-			return body.gamestate.board
+			return body
+		}
+		return errorHandler(body.message)
+	} catch (e) {
+		throw e;
+	}
+};
+
+const makeDiscMove = async (clickedDisc, ghostDisc) => {
+	const from = {
+		x: clickedDisc.discInfo.x,
+		y: clickedDisc.discInfo.y
+	}
+	const to = {
+		x: ghostDisc.discInfo.x,
+		y: ghostDisc.discInfo.y
+	}
+	let response;
+	try {
+		response = await fetch('api/moveDisc', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8',
+			},
+			body: JSON.stringify({ from, to }),
+		});
+		const body = await response.json()
+		if (response.status === 200) {
+			return body
 		}
 		return errorHandler(body.message)
 	} catch (e) {
