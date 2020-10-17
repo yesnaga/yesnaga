@@ -150,8 +150,8 @@ class Game {
 
 	mouseClicked(e) {
 		const clickedToken = this.tokens.find((t) => t.clicked);
-		const hoveringDisc = this.discs.find((d) => d.hovering);
 		const hoveringToken = this.tokens.find((t) => t.hovering);
+		const hoveringDisc = this.discs.find((d) => d.hovering);
 		if (this.phase === 'initial') {
 			return this.mouseClickInitialPhase(clickedToken, hoveringDisc, hoveringToken)
 		}

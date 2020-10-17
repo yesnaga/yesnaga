@@ -11,7 +11,7 @@ function preload() {
 
 function setup() {
 	createCanvas(1200, 1000);
-	frameRate(20)
+	//frameRate(20)
 	game.setup();
 }
 
