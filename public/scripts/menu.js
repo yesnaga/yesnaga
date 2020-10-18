@@ -61,6 +61,12 @@ class Menu {
                 textAlign: [CENTER, TOP],
                 x: 0,
                 y: 60,
+                position: {
+                    x: 0,
+                    y: 60,
+                    height: 10,
+                    width: 300,
+                },
                 textSize: width / 10,
                 allowHovering: false,
                 click: function () {
@@ -73,6 +79,12 @@ class Menu {
                 textAlign: [CENTER, TOP],
                 x: 0,
                 y: 250,
+                position: {
+                    x: 0,
+                    y: 250,
+                    height: 10,
+                    width: 300,
+                },
                 textSize: width / 14,
                 allowHovering: true,
                 click: () => {
@@ -86,6 +98,12 @@ class Menu {
                 textAlign: [CENTER, TOP],
                 x: 0,
                 y: 370,
+                position: {
+                    x: 0,
+                    y: 370,
+                    height: 10,
+                    width: 300,
+                },
                 textSize: width / 14,
                 allowHovering: !!this.pid,
                 click: () => {
@@ -98,6 +116,12 @@ class Menu {
                 textAlign: [CENTER, TOP],
                 x: 0,
                 y: 490,
+                position: {
+                    x: 0,
+                    y: 490,
+                    height: 10,
+                    width: 300,
+                },
                 textSize: width / 14,
                 allowHovering: true,
                 click: () => this.showInstructions = !this.showInstructions
@@ -128,14 +152,14 @@ class Menu {
     mouseClicked(event) {
         if (this.showNewGameOptions) {
             const currentGameOption = Object.keys(newGameOptionsItems).find(gameOption => {
-                return hoveringGameOption(newGameOptionsItems[gameOption])
+                return hoveringMenuItem(newGameOptionsItems[gameOption])
             })
 
             if (currentGameOption) newGameOptionsItems[currentGameOption].click()
             return
         }
         const currentMenuItem = Object.keys(this.menuItems).find(menuItem => {
-            return hoveringMenuItemCheck(this.menuItems[menuItem], event)
+            return hoveringMenuItemCheck(this.menuItems[menuItem])
         })
         if (currentMenuItem) this.menuItems[currentMenuItem].click()
     }
@@ -182,24 +206,12 @@ class Menu {
     }
 }
 
-const hoveringGameOption = (gameOption) => {
-    const { position } = gameOption
+const hoveringMenuItemCheck = (item) => {
+    const { position } = item
     return position.y < mouseY
         && position.y + position.height > mouseY
         && position.x < mouseX
         && position.x + position.width > mouseX
-}
-
-const hoveringMenuItemCheck = (menuItem, event = { pageY: mouseY + 30, pageX: mouseX + 30 }) => {
-    const [verticalOffset, horizontalOffset] = [40, 490]
-    const { pageY, pageX } = event
-    const [adjustedY, adjustedX] = [pageY - verticalOffset, pageX - horizontalOffset]
-
-    // TODO add horizontal check too
-    return adjustedY > menuItem.y
-        && adjustedY < menuItem.y + menuItem.textSize
-        && adjustedX > menuItem.x
-        && adjustedX < menuItem.x + width / 2
 }
 
 const drawContent = (menuItem) => {
@@ -207,7 +219,7 @@ const drawContent = (menuItem) => {
     textSize(menuItem.textSize);
     textAlign(...menuItem.textAlign)
     fill(menuItem.hovering && menuItem.allowHovering ? 'orange' : menuItem.color)
-    text(menuItem.content, menuItem.x, menuItem.y, width)
+    text(menuItem.content, menuItem.position.x, menuItem.position.y, width)
 }
 
 
@@ -216,12 +228,11 @@ const drawNewGameOptions = (player1Name, player2Name) => {
     drawPlayerInput(newGameOptionsItems.player1, player1Name)
     drawPlayerInput(newGameOptionsItems.player2, player2Name)
 
-
     // textSelectCursor
-    fill('black')
     if (frameCount % 60 > 30) {
         // prevents the textselect to show if name has a value
         if ((menu.textSelectAtPlayer1 && !player1Name) || (!menu.textSelectAtPlayer1 && !player2Name)) {
+            fill('black')
             const selectPosition = menu.textSelectAtPlayer1 ? [315, 215, 315, 245] : [615, 215, 615, 245]
             line(...selectPosition)
         }
