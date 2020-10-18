@@ -1,5 +1,3 @@
-
-
 let game;
 let menu;
 
@@ -10,7 +8,6 @@ function preload() {
 function setup() {
 	createCanvas(1200, 1000);
 	menu.setup()
-	//game.setup();
 }
 
 function draw() {
@@ -19,6 +16,7 @@ function draw() {
 
 function keyPressed() {
 	game ? game.cheatCode(key) : menu.keyPressed(key)
+	// prevents default browser behaviour
 	return false
 }
 function mouseClicked(e) {

@@ -243,6 +243,7 @@ const continueGame = pid => {
         .then(result => result.json())
         .then(formattedResult => {
             game = new Game(formattedResult);
+            game.setup()
         })
         .catch(error => console.error('error', error));
 
@@ -262,6 +263,7 @@ const createGame = (player1Name, player2Name) => {
         .then(result => result.json())
         .then(formattedResult => {
             game = new Game(formattedResult);
+            game.setup()
         })
         .catch(error => console.error('error', error));
 }
