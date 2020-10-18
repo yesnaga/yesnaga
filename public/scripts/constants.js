@@ -6,30 +6,30 @@ const m = 4;
 const d = 80;
 
 const NEIGHBOURS = {
-	tl: {
-		x: (oldX) => oldX - (d + m) * sin30 / sin90,
-		y: (oldY) => oldY - (d + m) * sin60 / sin90,
-	},
-	tr: {
-		x: (oldX) => oldX + (d + m) * sin30 / sin90,
-		y: (oldY) => oldY - (d + m) * sin60 / sin90,
-	},
-	l: {
-		x: (oldX) => oldX - (d + m),
-		y: (oldY) => oldY,
-	},
-	r: {
-		x: (oldX) => oldX + (d + m),
-		y: (oldY) => oldY,
-	},
-	bl: {
-		x: (oldX) => oldX - (d + m) * sin30 / sin90,
-		y: (oldY) => oldY + (d + m) * sin60 / sin90,
-	},
-	br: {
-		x: (oldX) => oldX + (d + m) * sin30 / sin90,
-		y: (oldY) => oldY + (d + m) * sin60 / sin90,
-	},
+    tl: {
+        x: (oldX) => oldX - (d + m) * sin30 / sin90,
+        y: (oldY) => oldY - (d + m) * sin60 / sin90,
+    },
+    tr: {
+        x: (oldX) => oldX + (d + m) * sin30 / sin90,
+        y: (oldY) => oldY - (d + m) * sin60 / sin90,
+    },
+    l: {
+        x: (oldX) => oldX - (d + m),
+        y: (oldY) => oldY,
+    },
+    r: {
+        x: (oldX) => oldX + (d + m),
+        y: (oldY) => oldY,
+    },
+    bl: {
+        x: (oldX) => oldX - (d + m) * sin30 / sin90,
+        y: (oldY) => oldY + (d + m) * sin60 / sin90,
+    },
+    br: {
+        x: (oldX) => oldX + (d + m) * sin30 / sin90,
+        y: (oldY) => oldY + (d + m) * sin60 / sin90,
+    },
 };
 
 // unused

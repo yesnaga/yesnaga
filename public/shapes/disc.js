@@ -9,11 +9,6 @@ class Disc {
 		this.hovering = false;
 		this.previewMode = false;
 	}
-	// uneeded variables?
-	/* static colors() {
-		return ['#F79B18', '#00ADEF'];
-	} */
-
 	draw() {
 		fill('#e5e5e5');
 		if (this.previewMode) {

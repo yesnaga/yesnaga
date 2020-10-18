@@ -29,7 +29,7 @@ class Hud {
 		const currentPlayer = game.getPlayerTurn();
 		fill(this.playerInformation[currentPlayer].color);
 		text(this.playerInformation[currentPlayer].name, 25, 60);
-		ellipse(140, 40, 15);
+		ellipse(140, 25, 15);
 
 		// draws hints in start phase
 		if (game.gameHistory.length < 3) {

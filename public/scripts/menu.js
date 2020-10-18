@@ -1,49 +1,4 @@
 
-const instructions =
-    `The game has a hexagonal playing area composed of 19 discs,
-     with each player having three moveable tokens, that start in alternating vertices around the hexagon.
-    Every turn, a player must do two things, in order:
-    
-        - Move one of their tokens in a straight line up to the end of the board or up to colliding with another token
-        - Move one of the exterior empty discs to another location on the playing area where it touches at least two discs.
-    Whoever first manages to connect their three tokens wins!`
-
-const newGameOptionsItems = {
-    player1: {
-        color: '#F79B18',
-        textAndPosition: ['Player 1', 350, 180],
-        position: {
-            x: 300,
-            y: 200,
-            width: 250,
-            height: 60,
-        },
-        click: () => menu.textSelectAtPlayer1 = true
-    },
-    player2: {
-        color: '#00ADEF',
-        textAndPosition: ['Player 2', 650, 180],
-        position: {
-            x: 600,
-            y: 200,
-            width: 250,
-            height: 60,
-        },
-        click: () => menu.textSelectAtPlayer1 = false
-    },
-    confirmButton: {
-        color: 'green',
-        textAndPosition: [`LOS GEHT'S!`, 575, 320],
-        position: {
-            x: 475,
-            y: 300,
-            width: 200,
-            height: 60
-        },
-        click: () => createGame(menu.player1, menu.player2)
-    }
-}
-
 class Menu {
     constructor() {
         this.pid = localStorage.getItem('yesnaga_pid') || '';
@@ -54,20 +9,53 @@ class Menu {
         this.player2 = ''
     }
     setup() {
+        this.newGameOptionsItems = {
+            player1: {
+                color: '#F79B18',
+                textAndPosition: ['Player 1', 350, 190],
+                position: {
+                    x: 300,
+                    y: 200,
+                    width: 250,
+                    height: 60,
+                },
+                click: () => this.textSelectAtPlayer1 = true
+            },
+            player2: {
+                color: '#00ADEF',
+                textAndPosition: ['Player 2', 650, 190],
+                position: {
+                    x: 600,
+                    y: 200,
+                    width: 250,
+                    height: 60,
+                },
+                click: () => menu.textSelectAtPlayer1 = false
+            },
+            confirmButton: {
+                color: 'green',
+                textAndPosition: [`LOS GEHT'S!`, 575, 335],
+                position: {
+                    x: 475,
+                    y: 300,
+                    width: 200,
+                    height: 60
+                },
+                click: () => createGame(menu.player1, menu.player2)
+            }
+        }
+
         this.menuItems = {
             title: {
                 content: 'YESNAGA',
                 color: 'black',
-                textAlign: [CENTER, TOP],
-                x: 0,
-                y: 60,
                 position: {
-                    x: 0,
+                    x: 310,
                     y: 60,
-                    height: 10,
-                    width: 300,
+                    height: 90,
+                    width: 500,
                 },
-                textSize: width / 10,
+                textSize: 120,
                 allowHovering: false,
                 click: function () {
                     console.log('https://github.com/Ojself/yesnaga')
@@ -76,98 +64,84 @@ class Menu {
             newGame: {
                 content: 'New Game',
                 color: 'black',
-                textAlign: [CENTER, TOP],
-                x: 0,
-                y: 250,
                 position: {
-                    x: 0,
+                    x: 400,
                     y: 250,
-                    height: 10,
-                    width: 300,
+                    height: 90,
+                    width: 450,
                 },
-                textSize: width / 14,
+                textSize: 85,
+                //textSize: width / 14,
                 allowHovering: true,
                 click: () => {
-                    this.showNewGameOptions = true
-                    this.hideAllMenuItems()
+                    menu.showNewGameOptions = true
                 }
             },
             continueGame: {
                 content: 'Continue Game',
-                color: this.pid ? 'black' : 'grey',
-                textAlign: [CENTER, TOP],
-                x: 0,
-                y: 370,
+                color: menu.pid ? 'black' : 'grey',
                 position: {
-                    x: 0,
+                    x: 310,
                     y: 370,
-                    height: 10,
-                    width: 300,
+                    height: 90,
+                    width: 450,
                 },
-                textSize: width / 14,
-                allowHovering: !!this.pid,
+                textSize: 85,
+                allowHovering: !!menu.pid,
                 click: () => {
-                    continueGame(this.pid)
+                    continueGame(menu.pid)
                 }
             },
             instructions: {
                 content: 'Instructions',
                 color: 'black',
-                textAlign: [CENTER, TOP],
-                x: 0,
-                y: 490,
                 position: {
-                    x: 0,
+                    x: 390,
                     y: 490,
-                    height: 10,
-                    width: 300,
+                    height: 90,
+                    width: 450,
                 },
-                textSize: width / 14,
+                textSize: 85,
                 allowHovering: true,
-                click: () => this.showInstructions = !this.showInstructions
+                click: () => menu.showInstructions = !menu.showInstructions
             },
         }
     }
 
     draw() {
         clear()
-        Object.keys(this.menuItems).forEach((menuItem) => {
-            const item = this.menuItems[menuItem]
-            item.hovering = hoveringMenuItemCheck(item)
-            drawContent(item)
-        })
 
         if (this.showNewGameOptions) {
-            drawNewGameOptions(this.player1, this.player2)
+            drawNewGameOptions(this.newGameOptionsItems, this.player1, this.player2)
+        } else {
+            Object.keys(this.menuItems).forEach((menuItem) => {
+                const item = this.menuItems[menuItem]
+                item.hovering = hoveringItemCheck(item)
+                drawContent(item)
+            })
         }
 
         if (this.showInstructions) {
             textSize(width / 60);
             fill("black")
             textAlign(CENTER, TOP)
-            text(instructions, 600, this.menuItems.instructions.y + 100)
+            text(instructions, 600, this.menuItems.instructions.position.y + 100)
         }
 
     }
-    mouseClicked(event) {
+    mouseClicked() {
         if (this.showNewGameOptions) {
-            const currentGameOption = Object.keys(newGameOptionsItems).find(gameOption => {
-                return hoveringMenuItem(newGameOptionsItems[gameOption])
+            const currentGameOption = Object.keys(this.newGameOptionsItems).find(gameOption => {
+                return hoveringItemCheck(this.newGameOptionsItems[gameOption])
             })
 
-            if (currentGameOption) newGameOptionsItems[currentGameOption].click()
+            if (currentGameOption) this.newGameOptionsItems[currentGameOption].click()
             return
         }
         const currentMenuItem = Object.keys(this.menuItems).find(menuItem => {
-            return hoveringMenuItemCheck(this.menuItems[menuItem])
+            return hoveringItemCheck(this.menuItems[menuItem])
         })
         if (currentMenuItem) this.menuItems[currentMenuItem].click()
-    }
-    hideAllMenuItems(exception = '') {
-        this.showInstructions = false
-        Object.keys(this.menuItems).forEach(menuItem => {
-            this.menuItems[menuItem].hide = !exception.includes(menuItem)
-        })
     }
     keyPressed(key) {
         // ignores all input if the input fields are now visibles
@@ -194,7 +168,8 @@ class Menu {
                 }
             default:
                 // prevents meta keys (ALT, TAB, BACKSPACE etcs)
-                if (key.length > 1) return
+                // prevents too long names
+                if (key.length > 1 || this.player1.length > 18 || this.player2.length > 18) return
                 if (this.textSelectAtPlayer1) {
                     this.player1 += key
                 } else {
@@ -206,7 +181,7 @@ class Menu {
     }
 }
 
-const hoveringMenuItemCheck = (item) => {
+const hoveringItemCheck = (item) => {
     const { position } = item
     return position.y < mouseY
         && position.y + position.height > mouseY
@@ -214,17 +189,17 @@ const hoveringMenuItemCheck = (item) => {
         && position.x + position.width > mouseX
 }
 
+// Draws title, new game etc
 const drawContent = (menuItem) => {
-    if (menuItem.hide) return;
+    textAlign(LEFT)
     textSize(menuItem.textSize);
-    textAlign(...menuItem.textAlign)
-    fill(menuItem.hovering && menuItem.allowHovering ? 'orange' : menuItem.color)
+    fill(menuItem.hovering && menuItem.allowHovering ? '#F79B18' : menuItem.color)
     text(menuItem.content, menuItem.position.x, menuItem.position.y, width)
 }
 
 
-
-const drawNewGameOptions = (player1Name, player2Name) => {
+// Draws aditional options when starting a new game
+const drawNewGameOptions = (newGameOptionsItems, player1Name, player2Name) => {
     drawPlayerInput(newGameOptionsItems.player1, player1Name)
     drawPlayerInput(newGameOptionsItems.player2, player2Name)
 
@@ -247,7 +222,7 @@ const drawNewGameOptions = (player1Name, player2Name) => {
     text(...newGameOptionsItems.confirmButton.textAndPosition)
 }
 
-
+// draws input field and name for player
 const drawPlayerInput = (player, name) => {
     fill(player.color)
     text(...player.textAndPosition)
@@ -256,11 +231,11 @@ const drawPlayerInput = (player, name) => {
     rect(position.x, position.y, position.width, position.height, 20)
     fill('black')
     textAlign(LEFT)
-    text(name, position.x + 20, position.y + 20)
+    text(name, position.x + 20, position.y + 35)
     textAlign(CENTER)
 }
 
-
+// allows to continue game by existing pid stored in local storage
 const continueGame = pid => {
     if (!pid) return
 
@@ -273,6 +248,7 @@ const continueGame = pid => {
 
 }
 
+// generates a new game
 const createGame = (player1Name, player2Name) => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -289,3 +265,14 @@ const createGame = (player1Name, player2Name) => {
         })
         .catch(error => console.error('error', error));
 }
+
+
+const instructions =
+    `The game has a hexagonal playing area composed of 19 discs,
+     with each player having three moveable tokens, that start in alternating vertices around the hexagon.
+    Every turn, a player must do two things, in order:
+    
+        - Move one of their tokens in a straight line up to the end of the board or up to colliding with another token
+        - Move one of the exterior empty discs to another location on the playing area where it touches at least two discs.
+    Whoever first manages to connect their three tokens wins!`
+
