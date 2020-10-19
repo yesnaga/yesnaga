@@ -4,10 +4,11 @@ class Game {
 		this.drawBackground = false;
 		this.cheatArray = [];
 		this.gameHistory = data.gameHistory || [];
-		this.errorMsg = null;
 		this.players = data.players;
+		this.pid = data.pid
 		this.winner = null
 
+		this.errorMsg = null;
 		this.setPhase(data.gamestate.phase)
 		this.replaceBoard(data.gamestate.board);
 		this.replaceHud(data)
@@ -166,7 +167,7 @@ class Game {
 
 	mouseClickInitialPhase(clickedToken, hoveringDisc, hoveringToken) {
 		if (clickedToken && hoveringDisc && this.checkLegalTokenMove(clickedToken, hoveringDisc)) {
-			makeTokenMove(clickedToken, hoveringDisc)
+			makeTokenMove(clickedToken, hoveringDisc, this.pid)
 				.then((result) => {
 					if (result) {
 						this.replaceBoard(result.gamestate.board)
@@ -194,7 +195,7 @@ class Game {
 
 	mouseClickMidMovePhase(clickedDisc, hoveringDisc, ghostDisc) {
 		if (clickedDisc && ghostDisc && this.checkLegalDiscMove(clickedDisc, ghostDisc)) {
-			makeDiscMove(clickedDisc, ghostDisc)
+			makeDiscMove(clickedDisc, ghostDisc, this.pid)
 				.then((result) => {
 					if (result) {
 						this.replaceBoard(result.gamestate.board)
@@ -223,7 +224,7 @@ class Game {
 }
 
 
-const makeTokenMove = async (clickedToken, nextDiscPosition) => {
+const makeTokenMove = async (clickedToken, nextDiscPosition, pid) => {
 	const from = {
 		x: clickedToken.tokenInfo.tile.x,
 		y: clickedToken.tokenInfo.tile.y
@@ -239,7 +240,7 @@ const makeTokenMove = async (clickedToken, nextDiscPosition) => {
 			headers: {
 				'Content-Type': 'application/json;charset=utf-8',
 			},
-			body: JSON.stringify({ from, to }),
+			body: JSON.stringify({ from, to, pid }),
 		});
 		const body = await response.json()
 		if (response.status === 200) {
@@ -251,7 +252,7 @@ const makeTokenMove = async (clickedToken, nextDiscPosition) => {
 	}
 };
 
-const makeDiscMove = async (clickedDisc, ghostDisc) => {
+const makeDiscMove = async (clickedDisc, ghostDisc, pid) => {
 	const from = {
 		x: clickedDisc.discInfo.x,
 		y: clickedDisc.discInfo.y
@@ -267,7 +268,7 @@ const makeDiscMove = async (clickedDisc, ghostDisc) => {
 			headers: {
 				'Content-Type': 'application/json;charset=utf-8',
 			},
-			body: JSON.stringify({ from, to }),
+			body: JSON.stringify({ from, to, pid }),
 		});
 		const body = await response.json()
 		if (response.status === 200) {

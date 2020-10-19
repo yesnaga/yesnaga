@@ -2,10 +2,13 @@
   margin:0;
   padding:0
 }
+body {
+  display:flex;
+  justify-content: center
+}
 
 canvas{
   margin-top: 2%;
-  margin-left: 2%;
 }
 
 body {

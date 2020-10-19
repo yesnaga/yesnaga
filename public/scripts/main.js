@@ -1,27 +1,25 @@
-
 let game;
+let menu;
 
 function preload() {
 	menu = new Menu()
-	// todo: somehow select the game or create a new one to get a real pid
-	loadJSON('/api/games/3gj9DLW9yQGIA2lU0BaW_', (result) => {
-		game = new Game(result);
-	});
 }
 
 function setup() {
 	createCanvas(1200, 1000);
-	//frameRate(20)
-	game.setup();
+	menu.setup()
 }
 
 function draw() {
-	game.draw();
+	game ? game.draw() : menu.draw()
 }
 
 function keyPressed() {
-	game.cheatCode(key);
+	game ? game.cheatCode(key) : menu.keyPressed(key)
+	// prevents default browser behaviour
+	return false
 }
 function mouseClicked(e) {
-	game.mouseClicked(e);
+	game ? game.mouseClicked(e) : menu.mouseClicked(e)
 }
+
