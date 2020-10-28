@@ -122,10 +122,12 @@ class Menu {
         }
 
         if (this.showInstructions) {
+            push()
             textSize(width / 60);
             fill("black")
             textAlign(CENTER, TOP)
             text(instructions, 600, this.menuItems.instructions.position.y + 100)
+            pop()
         }
 
     }
@@ -251,12 +253,13 @@ const continueGame = pid => {
 
 // generates a new game
 const createGame = (player1Name, player2Name) => {
+    const body = JSON.stringify( {"players": [player1Name || 'orange', player2Name || 'blue'] })
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     const requestOptions = {
         method: 'PUT',
         headers: myHeaders,
-        body: JSON.stringify({ "players": [player1Name || 'orange', player2Name || 'blue'] }),
+        body
     };
 
     fetch("api/games", requestOptions)
