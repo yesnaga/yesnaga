@@ -6,7 +6,7 @@ const hints = {
 class Hud {
 	constructor(game) {
 		this.confetti = []
-		this.winner = game.winner
+		this.winner = game.gamestate.winner
 		this.playerInformation = game.players.map((name, index) => ({
 			name,
 			color: Hud.colors()[index % Hud.colors().length],
