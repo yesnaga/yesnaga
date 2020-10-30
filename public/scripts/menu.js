@@ -253,7 +253,7 @@ const continueGame = pid => {
 
 // generates a new game
 const createGame = (player1Name, player2Name) => {
-    const body = JSON.stringify( {"players": [player1Name || 'orange', player2Name || 'blue'] })
+    const body = JSON.stringify({ players: [player1Name || 'orange', player2Name || 'blue'] })
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     const requestOptions = {
@@ -280,4 +280,3 @@ const instructions =
         - Move one of their tokens in a straight line up to the end of the board or up to colliding with another token
         - Move one of the exterior empty discs to another location on the playing area where it touches at least two discs.
     Whoever first manages to connect their three tokens wins!`
-
