@@ -22,7 +22,7 @@ class Hud {
 	}
 
 	setupConfetti(){
-		if (!this.winner)return
+		if (!this.winner) return;
 		const confettiColors = ['#00aeef','#ec008c','#72c8b6'];
     	this.confetti = Array.from({length: 100}, _ => new Confetti(random(0, width), random(-height, 0), random(-1, 1), random(confettiColors)))
 	}
