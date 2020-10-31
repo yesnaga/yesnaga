@@ -1,7 +1,5 @@
 class Game {
 	constructor(data) {
-		this.background = new Background();
-		this.drawBackground = false;
 		this.cheatArray = [];
 		this.gameHistory = data.gameHistory || [];
 		this.players = data.players;
@@ -19,7 +17,15 @@ class Game {
 	}
 
 	setPhase(phase = 'initial') {
-		// Enum: ['intial', 'mid_move']
+		// Enum: ['intial', 'mid_move', 'finished']
+		if (phase === 'finished'){
+			localStorage.removeItem('yesnaga_pid');
+			setTimeout(() => {
+				// reloads the page after finishing the game
+				// forcing the user back to main menu
+				location.reload();
+			}, 20 * 1000);
+		}
 		this.phase = phase
 	}
 
@@ -52,16 +58,8 @@ class Game {
 		return this.gameHistory.length % 2;
 	}
 
-	setup() {
-		this.background.setup();
-	}
-
 	draw() {
 		clear();
-		if (this.drawBackground) {
-			this.background.draw();
-		}
-		this.hud.draw();
 		this.discs.forEach((disc) => {
 			disc.hovering = this.discHoverCheck(disc, mouseX, mouseY);
 			disc.draw();
@@ -76,32 +74,26 @@ class Game {
 				ghostDisc.draw();
 			})
 		}
+		this.hud.draw();
 		if (this.errorMsg) {
 			fill('tomato');
 			text(`${this.errorMsg}`, 25, 150);
 		}
-		// text(`${mouseX.toFixed(2)}   ${mouseY.toFixed(2)}`, mouseX, mouseY);
 	}
 
 	cheatCode(key) {
 		// user can trigger easter egg with the konami code
 		this.cheatArray.push(key);
-		if (key === 'B' || key.toLowerCase() === 'q') {
-			this.drawBackground = !this.drawBackground;
-			background('white'); // this for resetting the background resulting in no trail of clouds on board.
-		}
 		const konamiCheat = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 		const stringifiedCheat = JSON.stringify(konamiCheat).toLowerCase();
 		const stringifiedInput = JSON.stringify(this.cheatArray).toLowerCase();
 
 		if (stringifiedInput === stringifiedCheat) {
-			this.background.xSunSpeed = 50;
 			console.warn('Super Yesnaga mode: activated');
 			console.warn('Starting reactors: online');
 			console.warn('Enabling advanced systems');
 			setTimeout(() => {
 				console.error('missing cpu power - aborting..');
-				this.background.xSunSpeed = 0.5;
 			}, 3000);
 		}
 

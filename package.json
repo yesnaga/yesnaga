@@ -20,7 +20,8 @@
 		"morgan": "~1.9.1",
 		"nanoid": "^3.1.12",
 		"pug": "^2.0.4",
-		"quick.db": "^7.1.2"
+		"quick.db": "^7.1.2",
+		"serve-favicon": "^2.5.0"
 	},
 	"devDependencies": {
 		"eslint": "^6.8.0",

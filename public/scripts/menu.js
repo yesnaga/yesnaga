@@ -245,7 +245,6 @@ const continueGame = pid => {
         .then(result => result.json())
         .then(formattedResult => {
             game = new Game(formattedResult);
-            game.setup()
         })
         .catch(error => console.error('error', error));
 
@@ -265,8 +264,8 @@ const createGame = (player1Name, player2Name) => {
     fetch("api/games", requestOptions)
         .then(result => result.json())
         .then(formattedResult => {
+            localStorage.setItem('yesnaga_pid', formattedResult.pid)
             game = new Game(formattedResult);
-            game.setup()
         })
         .catch(error => console.error('error', error));
 }
