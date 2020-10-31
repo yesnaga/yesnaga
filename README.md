@@ -25,7 +25,7 @@ OR
 1. Make sure you have [Nodejs](https://nodejs.org/) installed
 2. `$git clone https://github.com/yesnaga/yesnaga.git && cd yesnaga`
 3. `$npm run start`
-4. Open https://localhost:3000 to play local multiplayer
+4. Open http://localhost:3000 to play local multiplayer
 
 ### Running tests
 
