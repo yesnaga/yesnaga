@@ -23,13 +23,13 @@ OR
 - Installing it locally on your computer following these simple steps:
 
 1. Make sure you have [Nodejs](https://nodejs.org/) installed
-2. `$git clone https://github.com/yesnaga/yesnaga.git && cd yesnaga`
-3. `$npm run start`
+2. `$ git clone https://github.com/yesnaga/yesnaga.git && cd yesnaga`
+3. `$ npm i && npm run start`
 4. Open http://localhost:3000 to play local multiplayer
 
 ### Running tests
 
-`$ npm test`
+`$ npm i && npm test`
 
 ## License
 
