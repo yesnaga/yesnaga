@@ -32,7 +32,7 @@ class Hud {
 		noStroke();
 		textSize(20);
 		fill('#BBB');
-		text('Player turn:', 25, 30);
+		text(this.winner? 'WINNER: ' : 'Player turn:', 25, 30);
 		textSize(26);
 		const currentPlayer = game.getPlayerTurn();
 		fill(this.playerInformation[currentPlayer].color);
@@ -45,7 +45,7 @@ class Hud {
 		}
 
 		// draws hints in start phase
-		if (game.gameHistory.length < 3) {
+		if (game.gameHistory.length < 3 && !this.winner) {
 			fill('#BBB');
 			textSize(map(sin(frameCount * 0.02), -20, 1, 45, 25));
 			text(`Move a ${hints[game.phase]}`, 25, 120);

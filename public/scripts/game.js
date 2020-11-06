@@ -5,8 +5,8 @@ class Game {
 		this.players = data.players;
 		this.pid = data.pid
 		this.winner = null
-
 		this.errorMsg = null;
+		this.setTurn(data.gamestate.turn)
 		this.setPhase(data.gamestate.phase)
 		this.replaceBoard(data.gamestate.board);
 		this.replaceHud(data)
@@ -14,6 +14,10 @@ class Game {
 
 	replaceHud(data = this) {
 		this.hud = new Hud(data)
+	}
+	// Mega hack, must fix
+	setTurn(size){
+		this.gameHistory = Array.from({length:size})
 	}
 
 	setPhase(phase = 'initial') {
@@ -164,7 +168,9 @@ class Game {
 					if (result) {
 						this.replaceBoard(result.gamestate.board)
 						this.setPhase(result.gamestate.phase)
+						this.setTurn(result.gamestate.turn)
 						this.replaceHud(result)
+						
 					}
 				})
 				.catch(errorHandler);
@@ -192,9 +198,8 @@ class Game {
 					if (result) {
 						this.replaceBoard(result.gamestate.board)
 						this.setPhase(result.gamestate.phase)
+						this.setTurn(result.gamestate.turn)
 						this.replaceHud(result)
-						// TODO: Fix following line.
-						this.gameHistory.push(result.gamestate.turn)
 					}
 				})
 				.catch(errorHandler);
