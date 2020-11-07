@@ -5,13 +5,13 @@ const hints = {
 
 class Hud {
 	constructor(game) {
-		this.confetti = []
-		this.winner = game.gamestate.winner
+		this.confetti = [];
+		this.winner = game.gamestate.winner;
 		this.playerInformation = game.players.map((name, index) => ({
 			name,
 			color: Hud.colors()[index % Hud.colors().length],
 		}));
-		this.setupConfetti()
+		this.setupConfetti();
 	}
 
 	static colors() {
@@ -21,10 +21,10 @@ class Hud {
 		];
 	}
 
-	setupConfetti(){
+	setupConfetti() {
 		if (!this.winner) return;
-		const confettiColors = ['#00aeef','#ec008c','#72c8b6'];
-    	this.confetti = Array.from({length: 100}, _ => new Confetti(random(0, width), random(-height, 0), random(-1, 1), random(confettiColors)))
+		const confettiColors = ['#00aeef', '#ec008c', '#72c8b6'];
+    	this.confetti = Array.from({ length: 100 }, (_) => new Confetti(random(0, width), random(-height, 0), random(-1, 1), random(confettiColors)));
 	}
 
 	draw() {
@@ -32,7 +32,7 @@ class Hud {
 		noStroke();
 		textSize(20);
 		fill('#BBB');
-		text(this.winner? 'WINNER: ' : 'Player turn:', 25, 30);
+		text(this.winner ? 'WINNER: ' : 'Player turn:', 25, 30);
 		textSize(26);
 		const currentPlayer = game.getPlayerTurn();
 		fill(this.playerInformation[currentPlayer].color);
@@ -40,8 +40,8 @@ class Hud {
 		ellipse(140, 25, 15);
 
 		// draws confetti
-		if (this.winner){
-			this.confetti.forEach(confetti=>confetti.draw())
+		if (this.winner) {
+			this.confetti.forEach((confetti) => confetti.draw());
 		}
 
 		// draws hints in start phase
@@ -56,32 +56,32 @@ class Hud {
 
 
 class Confetti {
-  constructor(x, y, speed, color) {
-    this.x = x;
+	constructor(x, y, speed, color) {
+		this.x = x;
  	this.y = y;
-	this.color = color
-    this.speed = speed;
-    this.time = random(0, 100);
-    this.amp = random(2, 30);
-    this.phase = random(0.5, 2);
-    this.size = random(width / 25, height / 50);
-    this.isCircle = Math.random() >= 0.5
-  }
+		this.color = color;
+		this.speed = speed;
+		this.time = random(0, 100);
+		this.amp = random(2, 30);
+		this.phase = random(0.5, 2);
+		this.size = random(width / 25, height / 50);
+		this.isCircle = Math.random() >= 0.5;
+	}
 
-  draw() {
-    fill(this.color);
-    noStroke();
-    push();
-    translate(this.x, this.y);
-    translate(this.amp * sin(this.time * this.phase), this.speed * cos(2 * this.time * this.phase));
-    rotate(this.time);
-    rectMode(CENTER);
-    scale(cos(this.time / 4), sin(this.time / 4));
-    this.isCircle ? ellipse(0, 0, this.size) : rect(0, 0, this.size, this.size / 2)
-    pop();
+	draw() {
+		fill(this.color);
+		noStroke();
+		push();
+		translate(this.x, this.y);
+		translate(this.amp * sin(this.time * this.phase), this.speed * cos(2 * this.time * this.phase));
+		rotate(this.time);
+		rectMode(CENTER);
+		scale(cos(this.time / 4), sin(this.time / 4));
+		this.isCircle ? ellipse(0, 0, this.size) : rect(0, 0, this.size, this.size / 2);
+		pop();
 
-    this.time = this.time + 0.1;
-    this.speed += 1 / 200;
-    this.y += this.speed;
-  }
+		this.time += 0.1;
+		this.speed += 1 / 200;
+		this.y += this.speed;
+	}
 }

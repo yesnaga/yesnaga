@@ -10,7 +10,7 @@ const baseRoutes = require('./routes');
 const apiRoutes = require('./routes/api');
 
 const app = express();
-app.use(favicon(path.join(__dirname,'public','images','favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
 app.use(helmet());
 
