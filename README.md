@@ -1,4 +1,4 @@
-![CodeQL](https://github.com/yesnaga/yesnaga/workflows/CodeQL/badge.svg) ![Node.js CI](https://github.com/yesnaga/yesnaga/workflows/Node.js%20CI/badge.svg)
+![CodeQL](https://github.com/yesnaga/yesnaga/workflows/CodeQL/badge.svg) ![Node.js CI](https://github.com/yesnaga/yesnaga/workflows/Node.js%20CI/badge.svg) [![codecov](https://codecov.io/gh/yesnaga/yesnaga/branch/master/graph/badge.svg?token=AT6AM9HZCQ)](https://codecov.io/gh/yesnaga/yesnaga)
 
 # YESNAGA
 
