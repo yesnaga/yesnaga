@@ -4,11 +4,13 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const helmet = require('helmet');
+const favicon = require('serve-favicon');
 
 const baseRoutes = require('./routes');
 const apiRoutes = require('./routes/api');
 
 const app = express();
+app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
 app.use(helmet());
 

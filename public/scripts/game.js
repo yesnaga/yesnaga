@@ -1,32 +1,43 @@
 class Game {
 	constructor(data) {
-		this.background = new Background();
-		this.drawBackground = false;
 		this.cheatArray = [];
 		this.gameHistory = data.gameHistory || [];
 		this.players = data.players;
-		this.pid = data.pid
-		this.winner = null
-
+		this.pid = data.pid;
+		this.winner = null;
 		this.errorMsg = null;
-		this.setPhase(data.gamestate.phase)
+		this.setTurn(data.gamestate.turn);
+		this.setPhase(data.gamestate.phase);
 		this.replaceBoard(data.gamestate.board);
-		this.replaceHud(data)
+		this.replaceHud(data);
 	}
 
 	replaceHud(data = this) {
-		this.hud = new Hud(data)
+		this.hud = new Hud(data);
+	}
+
+	// Mega hack, must fix
+	setTurn(size) {
+		this.gameHistory = Array.from({ length: size });
 	}
 
 	setPhase(phase = 'initial') {
-		// Enum: ['intial', 'mid_move']
-		this.phase = phase
+		// Enum: ['intial', 'mid_move', 'finished']
+		if (phase === 'finished') {
+			localStorage.removeItem('yesnaga_pid');
+			setTimeout(() => {
+				// reloads the page after finishing the game
+				// forcing the user back to main menu
+				location.reload();
+			}, 20 * 1000);
+		}
+		this.phase = phase;
 	}
 
 	replaceBoard(board) {
 		this.tokens = [];
 		this.discs = [];
-		this.ghostDiscs = []
+		this.ghostDiscs = [];
 		this.playerTokens = board.players;
 
 		const uniqueGhostDiscs = new Set();
@@ -34,7 +45,7 @@ class Game {
 		board.discs.forEach((d) => {
 			this.discs.push(new Disc(d.x * 120 + (d.y * -60) + 500, d.y * 100 + 500, 80, d));
 
-			d.moveableTo.forEach(ghostDisc => uniqueGhostDiscs.add(JSON.stringify(ghostDisc)))
+			d.moveableTo.forEach((ghostDisc) => uniqueGhostDiscs.add(JSON.stringify(ghostDisc)));
 
 			this.playerTokens.forEach((player) => {
 				const token = player.tokens.find((t) => t.tile.x === d.x && t.tile.y === d.y);
@@ -44,24 +55,16 @@ class Game {
 			});
 		});
 		this.ghostDiscs = Array.from(uniqueGhostDiscs)
-			.map(ghostDisc => JSON.parse(ghostDisc))
-			.map(ghostDisc => new GhostDisc(ghostDisc.x * 120 + (ghostDisc.y * -60) + 500, ghostDisc.y * 100 + 500, 80, ghostDisc))
+			.map((ghostDisc) => JSON.parse(ghostDisc))
+			.map((ghostDisc) => new GhostDisc(ghostDisc.x * 120 + (ghostDisc.y * -60) + 500, ghostDisc.y * 100 + 500, 80, ghostDisc));
 	}
 
 	getPlayerTurn() {
 		return this.gameHistory.length % 2;
 	}
 
-	setup() {
-		this.background.setup();
-	}
-
 	draw() {
 		clear();
-		if (this.drawBackground) {
-			this.background.draw();
-		}
-		this.hud.draw();
 		this.discs.forEach((disc) => {
 			disc.hovering = this.discHoverCheck(disc, mouseX, mouseY);
 			disc.draw();
@@ -74,34 +77,28 @@ class Game {
 			this.ghostDiscs.forEach((ghostDisc) => {
 				ghostDisc.hovering = this.ghostDiscHoverCheck(ghostDisc, mouseX, mouseY);
 				ghostDisc.draw();
-			})
+			});
 		}
+		this.hud.draw();
 		if (this.errorMsg) {
 			fill('tomato');
 			text(`${this.errorMsg}`, 25, 150);
 		}
-		// text(`${mouseX.toFixed(2)}   ${mouseY.toFixed(2)}`, mouseX, mouseY);
 	}
 
 	cheatCode(key) {
 		// user can trigger easter egg with the konami code
 		this.cheatArray.push(key);
-		if (key === 'B' || key.toLowerCase() === 'q') {
-			this.drawBackground = !this.drawBackground;
-			background('white'); // this for resetting the background resulting in no trail of clouds on board.
-		}
 		const konamiCheat = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 		const stringifiedCheat = JSON.stringify(konamiCheat).toLowerCase();
 		const stringifiedInput = JSON.stringify(this.cheatArray).toLowerCase();
 
 		if (stringifiedInput === stringifiedCheat) {
-			this.background.xSunSpeed = 50;
 			console.warn('Super Yesnaga mode: activated');
 			console.warn('Starting reactors: online');
 			console.warn('Enabling advanced systems');
 			setTimeout(() => {
 				console.error('missing cpu power - aborting..');
-				this.background.xSunSpeed = 0.5;
 			}, 3000);
 		}
 
@@ -138,13 +135,14 @@ class Game {
 			disc.previewMode = false;
 		}
 		for (const ghostDisc of this.ghostDiscs) {
-			ghostDisc.display = false
+			ghostDisc.display = false;
 		}
 	}
 
 	checkLegalTokenMove(token, disc) {
 		return token.tokenInfo.moveableTo.some((legalMoves) => legalMoves.id === disc.discInfo.id);
 	}
+
 	checkLegalDiscMove(disc, ghostDisc) {
 		return disc.discInfo.moveableTo.some((legalMoves) => legalMoves.x === ghostDisc.discInfo.x && legalMoves.y === ghostDisc.discInfo.y);
 	}
@@ -154,13 +152,13 @@ class Game {
 		const hoveringToken = this.tokens.find((t) => t.hovering);
 		const hoveringDisc = this.discs.find((d) => d.hovering);
 		if (this.phase === 'initial') {
-			return this.mouseClickInitialPhase(clickedToken, hoveringDisc, hoveringToken)
+			return this.mouseClickInitialPhase(clickedToken, hoveringDisc, hoveringToken);
 		}
 		const clickedDisc = this.discs.find((d) => d.clicked);
 		const ghostDisc = this.ghostDiscs.find((gd) => gd.hovering);
 
 		if (this.phase === 'mid_move') {
-			return this.mouseClickMidMovePhase(clickedDisc, hoveringDisc, ghostDisc)
+			return this.mouseClickMidMovePhase(clickedDisc, hoveringDisc, ghostDisc);
 		}
 	}
 
@@ -170,9 +168,10 @@ class Game {
 			makeTokenMove(clickedToken, hoveringDisc, this.pid)
 				.then((result) => {
 					if (result) {
-						this.replaceBoard(result.gamestate.board)
-						this.setPhase(result.gamestate.phase)
-						this.replaceHud(result)
+						this.replaceBoard(result.gamestate.board);
+						this.setPhase(result.gamestate.phase);
+						this.setTurn(result.gamestate.turn);
+						this.replaceHud(result);
 					}
 				})
 				.catch(errorHandler);
@@ -190,7 +189,6 @@ class Game {
 				}
 			});
 		}
-
 	}
 
 	mouseClickMidMovePhase(clickedDisc, hoveringDisc, ghostDisc) {
@@ -198,11 +196,10 @@ class Game {
 			makeDiscMove(clickedDisc, ghostDisc, this.pid)
 				.then((result) => {
 					if (result) {
-						this.replaceBoard(result.gamestate.board)
-						this.setPhase(result.gamestate.phase)
-						this.replaceHud(result)
-						// TODO: Fix following line.
-						this.gameHistory.push(result.gamestate.turn)
+						this.replaceBoard(result.gamestate.board);
+						this.setPhase(result.gamestate.phase);
+						this.setTurn(result.gamestate.turn);
+						this.replaceHud(result);
 					}
 				})
 				.catch(errorHandler);
@@ -211,15 +208,11 @@ class Game {
 
 		if (hoveringDisc && hoveringDisc.discInfo.moveable) {
 			hoveringDisc.clicked = !hoveringDisc.clicked;
-			hoveringDisc.discInfo.moveableTo.forEach(moveableToDisc => {
-				const discToDisplay =
-					this.ghostDiscs.find(ghostDisc => {
-						return ghostDisc.discInfo.x === moveableToDisc.x && ghostDisc.discInfo.y === moveableToDisc.y
-					})
-				discToDisplay.display = true
-			})
+			hoveringDisc.discInfo.moveableTo.forEach((moveableToDisc) => {
+				const discToDisplay =					this.ghostDiscs.find((ghostDisc) => ghostDisc.discInfo.x === moveableToDisc.x && ghostDisc.discInfo.y === moveableToDisc.y);
+				discToDisplay.display = true;
+			});
 		}
-
 	}
 }
 
@@ -227,12 +220,12 @@ class Game {
 const makeTokenMove = async (clickedToken, nextDiscPosition, pid) => {
 	const from = {
 		x: clickedToken.tokenInfo.tile.x,
-		y: clickedToken.tokenInfo.tile.y
-	}
+		y: clickedToken.tokenInfo.tile.y,
+	};
 	const to = {
 		x: nextDiscPosition.discInfo.x,
-		y: nextDiscPosition.discInfo.y
-	}
+		y: nextDiscPosition.discInfo.y,
+	};
 	let response;
 	try {
 		response = await fetch('api/moveToken', {
@@ -242,11 +235,11 @@ const makeTokenMove = async (clickedToken, nextDiscPosition, pid) => {
 			},
 			body: JSON.stringify({ from, to, pid }),
 		});
-		const body = await response.json()
+		const body = await response.json();
 		if (response.status === 200) {
-			return body
+			return body;
 		}
-		return errorHandler(body.message)
+		return errorHandler(body.message);
 	} catch (e) {
 		throw e;
 	}
@@ -255,12 +248,12 @@ const makeTokenMove = async (clickedToken, nextDiscPosition, pid) => {
 const makeDiscMove = async (clickedDisc, ghostDisc, pid) => {
 	const from = {
 		x: clickedDisc.discInfo.x,
-		y: clickedDisc.discInfo.y
-	}
+		y: clickedDisc.discInfo.y,
+	};
 	const to = {
 		x: ghostDisc.discInfo.x,
-		y: ghostDisc.discInfo.y
-	}
+		y: ghostDisc.discInfo.y,
+	};
 	let response;
 	try {
 		response = await fetch('api/moveDisc', {
@@ -270,21 +263,21 @@ const makeDiscMove = async (clickedDisc, ghostDisc, pid) => {
 			},
 			body: JSON.stringify({ from, to, pid }),
 		});
-		const body = await response.json()
+		const body = await response.json();
 		if (response.status === 200) {
-			return body
+			return body;
 		}
-		return errorHandler(body.message)
+		return errorHandler(body.message);
 	} catch (e) {
 		throw e;
 	}
 };
 
-const errorHandler = error => {
-	console.error(`Error occured: ${error}`)
-	game.errorMsg = error
+const errorHandler = (error) => {
+	console.error(`Error occured: ${error}`);
+	game.errorMsg = error;
 	setTimeout(() => {
 		game.errorMsg = null;
 	}, 5000);
 	// throw error
-}
+};
