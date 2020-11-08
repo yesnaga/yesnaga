@@ -18,7 +18,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
+    - run: npm test
+      if: matrix.node-version != '14.x'
     - run: npm test -- --coverage
+      if: matrix.node-version == '14.x'
       env:
         CI: true
     - name: Post Coverage
