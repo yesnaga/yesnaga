@@ -18,6 +18,12 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - run: npm test
+    - run: npm test -- --coverage
       env:
         CI: true
+    - name: Post Coverage
+      uses: codecov/codecov-action@v1
+      if: matrix.node-version == '14.x'
+      with:
+        flags: unittests
+        fail_ci_if_error: true
