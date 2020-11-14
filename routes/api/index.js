@@ -9,11 +9,6 @@ const initMoveRoutes = require('./move');
 
 const router = express.Router();
 
-/* router.use((req, res, next) => {
-	res.locals.pid = '3gj9DLW9yQGIA2lU0BaW_';
-	next();
-}); */
-
 initGameRoutes(router);
 initMoveRoutes(router);
 
