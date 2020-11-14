@@ -1,24 +1,28 @@
 let game;
-let menu;
 
 function preload() {
-	menu = new Menu();
+	const pid = localStorage.getItem('yesnaga_pid');
+	return fetch(`api/games/${pid}`, { method: 'GET' })
+		.then((result) => result.json())
+		.then((formattedResult) => {
+			game = new Game(formattedResult);
+		})
+		.catch((error) => console.error('error', error));
 }
 
 function setup() {
 	createCanvas(1200, 1000);
-	menu.setup();
 }
 
 function draw() {
-	game ? game.draw() : menu.draw();
+	if (game) game.draw();
 }
 
 function keyPressed() {
-	game ? game.cheatCode(key) : menu.keyPressed(key);
+	if (game) game.cheatCode(key);
 	// prevents default browser behaviour
 	return false;
 }
 function mouseClicked(e) {
-	game ? game.mouseClicked(e) : menu.mouseClicked(e);
+	if (game) game.mouseClicked(e);
 }

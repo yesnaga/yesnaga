@@ -1,0 +1,18 @@
+extends layout
+
+block styles
+  link(rel='stylesheet', href='/stylesheets/new.css')
+
+block content
+  #new-game-container
+    h1 New Game
+    #players
+      .player
+        label(for='playerOne') Player 1
+        input#playerOne(placeholder='orange')
+      .player
+        label(for='playerTwo') Player 2
+        input#playerTwo(placeholder='blue')
+    button#start Let's go!
+
+  script(src='/scripts/new.js')

@@ -1,4 +1,22 @@
 extends layout
 
+block styles
+  link(rel='stylesheet', href='/stylesheets/menu.css')
+
 block content
-  p Welcome to Yesnaga!
+  .menu-container
+    h1 YESNAGA
+    a(href='/new')
+      h2 New Game
+    h2#continue(disabled) Continue Game
+    h2#instructions Instructions
+    #instructions-text(hidden)
+      p
+      | The game has a hexagonal playing area composed of 19 discs,
+      | with each player having three moveable tokens, that start in alternating vertices around the hexagon.
+      p Every turn, a player must do two things, in order:
+      ul
+        li Move one of their tokens in a straight line up to the end of the board or up to colliding with another token
+        li Move one of the exterior empty discs to another location on the playing area where it touches at least two discs.
+      p Whoever first manages to connect their three tokens wins!
+  script(src='/scripts/menu.js')
