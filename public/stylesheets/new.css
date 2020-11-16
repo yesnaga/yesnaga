@@ -1,0 +1,42 @@
+#new-game-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 2rem;
+}
+
+#players {
+	margin: 2rem;
+	display: flex;
+}
+
+.player {
+	display: flex;
+	flex-direction: column;
+	margin: 0 10px;
+}
+
+.player input {
+	padding: 10px;
+	border-radius: 10px;
+	margin-top: 5px;
+}
+
+label {
+	font-weight: bold;
+}
+
+label[for='playerOne'] {
+	color: #F79B18;
+}
+
+label[for='playerTwo'] {
+	color: #00ADEF;
+}
+
+button#start {
+	background-color: green;
+	color: white;
+	padding: 10px;
+	border-radius: 10px;
+}

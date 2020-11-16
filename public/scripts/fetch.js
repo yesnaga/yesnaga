@@ -1,8 +1,3 @@
-/* const baseUrl = process.env.NODE_ENV === 'production'
-	? '/api'
-	: `http://${window.location.hostname}:3000/api`
- */
-
 const errHandler = (err) => {
 	console.error(err);
 	if (err.response && err.response.data) {
