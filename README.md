@@ -12,15 +12,17 @@ The game has a hexagonal playing area composed of 19 discs, with each player hav
 
 Whoever first manages to connect their three tokens wins!
 
+![](./docs/screencast.gif)
+
 ## Getting started
 
 You have two options to play Yesnaga
 
-- Go to [yesnaga.parnswir.de](https://yesnaga.parnswir.de)
+- Visit [yesnaga.parnswir.de](https://yesnaga.parnswir.de)
 
 OR
 
-- Installing it locally on your computer following these simple steps:
+- Run it locally on your computer following these simple steps:
 
 1. Make sure you have [Nodejs](https://nodejs.org/) installed
 2. `$ git clone https://github.com/yesnaga/yesnaga.git && cd yesnaga`
@@ -37,4 +39,4 @@ Distributed under the GNU General Public License v3.0. See [LICENSE](./LICENSE) 
 
 ## Contact
 
-## Aknowledgements
+Created with 💙 by [Tor](https://github.com/Ojself) and [Max](https://github.com/Parnswir) in their free time. Don't be too hard on them.
