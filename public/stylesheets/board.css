@@ -1,0 +1,10 @@
+#board {
+	margin: 0;
+	display: flex;
+
+	justify-content: center;
+}
+
+#board canvas {
+	margin-top: 0;
+}

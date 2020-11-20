@@ -26,9 +26,8 @@ class Game {
 		if (phase === 'finished') {
 			localStorage.removeItem('yesnaga_pid');
 			setTimeout(() => {
-				// reloads the page after finishing the game
-				// forcing the user back to main menu
-				location.reload();
+				// force the user back to main menu after the game is done
+				window.location = '/';
 			}, 20 * 1000);
 		}
 		this.phase = phase;

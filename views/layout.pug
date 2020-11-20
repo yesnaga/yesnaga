@@ -7,7 +7,8 @@ html
   body
     .content
       block content
-    .footer
-      a(href='https://github.com/yesnaga/yesnaga', target='_blank', rel='noopener')
-        = title
-      = version
+    if version
+      .footer
+        a(href='https://github.com/yesnaga/yesnaga', target='_blank', rel='noopener')
+          = title
+        = version

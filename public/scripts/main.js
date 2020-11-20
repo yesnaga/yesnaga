@@ -11,7 +11,12 @@ function preload() {
 }
 
 function setup() {
-	createCanvas(1200, 1000);
+	const canvas = createCanvas(windowWidth, windowHeight);
+	canvas.parent('board');
+}
+
+function windowResized() {
+	resizeCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
