@@ -40,3 +40,31 @@ button#start {
 	padding: 10px;
 	border-radius: 10px;
 }
+
+@media only screen and (max-width: 1024px) {
+	h1 {
+		margin-top: 10rem;
+		font-size: 6rem;
+		margin-bottom: 6rem;
+	}
+
+	#players {
+		flex-direction: column;
+		width: 100%;
+		font-size: 4rem;
+	}
+
+	.player {
+		margin: 32px 16px;
+	}
+
+	.player input {
+		font-size: 3rem;
+	}
+
+	button#start {
+		font-size: 4rem;
+		padding: 20px;
+		border-radius: 20px;
+	}
+}

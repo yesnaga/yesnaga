@@ -11,6 +11,12 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+@media only screen and (max-width: 1024px) {
+  body {
+    font-size: 28px;
+  }
+}
+
 canvas{
   margin-top: 2%;
 }
