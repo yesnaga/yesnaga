@@ -1,6 +1,5 @@
 class Game {
 	constructor(data) {
-		console.log(data);
 		this.cheatArray = [];
 		this.state = data.gamestate;
 		this.players = data.players;
@@ -33,8 +32,17 @@ class Game {
 		this.playerTokens = board.players;
 
 		const uniqueGhostDiscs = new Set();
+		let lastMovedDisc = {};
+
+		if (this.state.turn > 0) {
+			lastMovedDisc = this.state.movedDiscs[this.state.turn - 1];
+		}
 
 		board.discs.forEach((d) => {
+			if (d.moveable && d.x === lastMovedDisc.to.x && d.y === lastMovedDisc.to.y) {
+				d.moveable = false;
+				d.moveableTo = [];
+			}
 			this.discs.push(new Disc(d.x * 120 + (d.y * -60) + 500, d.y * 100 + 500, 80, d));
 
 			d.moveableTo.forEach((ghostDisc) => uniqueGhostDiscs.add(JSON.stringify(ghostDisc)));
