@@ -1,13 +1,12 @@
 class Game {
 	constructor(data) {
+		console.log(data);
 		this.cheatArray = [];
-		this.gameHistory = data.gameHistory || [];
+		this.state = data.gamestate;
 		this.players = data.players;
 		this.pid = data.pid;
 		this.winner = null;
 		this.errorMsg = null;
-		this.setTurn(data.gamestate.turn);
-		this.setPhase(data.gamestate.phase);
 		this.replaceBoard(data.gamestate.board);
 		this.replaceHud(data);
 	}
@@ -16,21 +15,15 @@ class Game {
 		this.hud = new Hud(data);
 	}
 
-	// Mega hack, must fix
-	setTurn(size) {
-		this.gameHistory = Array.from({ length: size });
-	}
-
-	setPhase(phase = 'initial') {
-		// Enum: ['intial', 'mid_move', 'finished']
-		if (phase === 'finished') {
+	setState(gamestate) {
+		this.state = gamestate;
+		if (this.state.phase === 'finished') {
 			localStorage.removeItem('yesnaga_pid');
 			setTimeout(() => {
 				// force the user back to main menu after the game is done
 				window.location = '/';
 			}, 20 * 1000);
 		}
-		this.phase = phase;
 	}
 
 	replaceBoard(board) {
@@ -59,7 +52,7 @@ class Game {
 	}
 
 	getPlayerTurn() {
-		return this.gameHistory.length % 2;
+		return this.state.turn % 2;
 	}
 
 	draw() {
@@ -72,7 +65,7 @@ class Game {
 			token.hovering = this.tileHoverCheck(token, mouseX, mouseY);
 			token.draw();
 		});
-		if (this.phase === 'mid_move') {
+		if (this.state.phase === 'mid_move') {
 			this.ghostDiscs.forEach((ghostDisc) => {
 				ghostDisc.hovering = this.ghostDiscHoverCheck(ghostDisc, mouseX, mouseY);
 				ghostDisc.draw();
@@ -108,7 +101,7 @@ class Game {
 	}
 
 	tileHoverCheck(tile, mX, mY) {
-		if (this.getPlayerTurn() !== tile.player || this.phase !== 'initial') {
+		if (this.getPlayerTurn() !== tile.player || this.state.phase !== 'initial') {
 			return false;
 		}
 		const delta = Math.sqrt((mX - tile.x) ** 2 + (mY - tile.y) ** 2);
@@ -150,13 +143,13 @@ class Game {
 		const clickedToken = this.tokens.find((t) => t.clicked);
 		const hoveringToken = this.tokens.find((t) => t.hovering);
 		const hoveringDisc = this.discs.find((d) => d.hovering);
-		if (this.phase === 'initial') {
+		if (this.state.phase === 'initial') {
 			return this.mouseClickInitialPhase(clickedToken, hoveringDisc, hoveringToken);
 		}
 		const clickedDisc = this.discs.find((d) => d.clicked);
 		const ghostDisc = this.ghostDiscs.find((gd) => gd.hovering);
 
-		if (this.phase === 'mid_move') {
+		if (this.state.phase === 'mid_move') {
 			return this.mouseClickMidMovePhase(clickedDisc, hoveringDisc, ghostDisc);
 		}
 	}
@@ -168,8 +161,7 @@ class Game {
 				.then((result) => {
 					if (result) {
 						this.replaceBoard(result.gamestate.board);
-						this.setPhase(result.gamestate.phase);
-						this.setTurn(result.gamestate.turn);
+						this.setState(result.gamestate);
 						this.replaceHud(result);
 					}
 				})
@@ -196,8 +188,7 @@ class Game {
 				.then((result) => {
 					if (result) {
 						this.replaceBoard(result.gamestate.board);
-						this.setPhase(result.gamestate.phase);
-						this.setTurn(result.gamestate.turn);
+						this.setState(result.gamestate);
 						this.replaceHud(result);
 					}
 				})
@@ -208,7 +199,7 @@ class Game {
 		if (hoveringDisc && hoveringDisc.discInfo.moveable) {
 			hoveringDisc.clicked = !hoveringDisc.clicked;
 			hoveringDisc.discInfo.moveableTo.forEach((moveableToDisc) => {
-				const discToDisplay =					this.ghostDiscs.find((ghostDisc) => ghostDisc.discInfo.x === moveableToDisc.x && ghostDisc.discInfo.y === moveableToDisc.y);
+				const discToDisplay = this.ghostDiscs.find((ghostDisc) => ghostDisc.discInfo.x === moveableToDisc.x && ghostDisc.discInfo.y === moveableToDisc.y);
 				discToDisplay.display = true;
 			});
 		}
@@ -278,5 +269,4 @@ const errorHandler = (error) => {
 	setTimeout(() => {
 		game.errorMsg = null;
 	}, 5000);
-	// throw error
 };

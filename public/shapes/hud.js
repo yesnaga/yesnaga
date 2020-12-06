@@ -45,10 +45,10 @@ class Hud {
 		}
 
 		// draws hints in start phase
-		if (game.gameHistory.length < 3 && !this.winner) {
+		if (game.state.turn < 3 && !this.winner) {
 			fill('#BBB');
 			textSize(map(sin(frameCount * 0.02), -20, 1, 45, 25));
-			text(`Move a ${hints[game.phase]}`, 25, 120);
+			text(`Move a ${hints[game.state.phase]}`, 25, 120);
 		}
 		stroke('black');
 	}
