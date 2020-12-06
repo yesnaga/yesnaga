@@ -38,3 +38,15 @@ h2[disabled=true] {
 #instructions-text ul li {
 	margin-left: 2rem;
 }
+
+@media only screen and (max-width: 1024px) {
+	h1 {
+		margin-top: 10rem;
+		font-size: 10rem;
+		margin-bottom: 6rem;
+	}
+
+	h2 {
+		font-size: 6rem;
+	}
+}
