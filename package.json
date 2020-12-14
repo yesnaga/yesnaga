@@ -11,6 +11,9 @@
 		"lint": "eslint . --ext .js --fix",
 		"test": "jest"
 	},
+	"nodemonConfig": {
+		"ext": "js,json,pug,yaml"
+	},
 	"dependencies": {
 		"cookie-parser": "^1.4.5",
 		"debug": "~2.6.9",
