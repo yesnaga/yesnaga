@@ -1,4 +1,5 @@
 const express = require('express');
+const OpenApiValidator = require('express-openapi-validator');
 
 const { ApplicationError } = require('../../lib/Errors');
 
@@ -8,6 +9,14 @@ const initGameRoutes = require('./game');
 const initMoveRoutes = require('./move');
 
 const router = express.Router();
+
+router.use(
+	OpenApiValidator.middleware({
+		apiSpec: './routes/api/openapi.yaml',
+		validateRequests: true,
+		validateResponses: true,
+	}),
+);
 
 initGameRoutes(router);
 initMoveRoutes(router);

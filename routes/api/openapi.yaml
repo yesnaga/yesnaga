@@ -1,0 +1,12 @@
+openapi: "3.0.2"
+info:
+  title: Yesnaga API
+  version: "1.0"
+servers:
+  - url: /api
+paths:
+  /board:
+    get:
+      responses:
+        "200":
+          description: OK
