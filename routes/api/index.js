@@ -40,7 +40,10 @@ router.use((err, req, res, next) => {
 			},
 		});
 	} else {
-		next(err);
+		res.status(err.status || 500).json({
+			message: err.message,
+			errors: err.errors,
+		});
 	}
 });
 
