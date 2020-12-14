@@ -17,7 +17,7 @@ class Disc {
 		}
 		ellipse(this.x, this.y, this.d);
 
-		if (game.phase === 'mid_move' && this.discInfo.moveable) {
+		if (game.state.phase === 'mid_move' && this.discInfo.moveable) {
 			const dotWeight = this.hovering || this.clicked ? 3.5 : 2;
 			fill('black');
 			for (let i = 0; i < 3; i++) {
