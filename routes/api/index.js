@@ -21,11 +21,6 @@ router.use(
 initGameRoutes(router);
 initMoveRoutes(router);
 
-router.get('/board', (req, res) => {
-	const game = Game.getByPid(res.locals.pid);
-	return res.json(game.toObject().gamestate.board);
-});
-
 router.use((err, req, res, next) => {
 	if (err instanceof ApplicationError) {
 		res.status(err.status()).json({
