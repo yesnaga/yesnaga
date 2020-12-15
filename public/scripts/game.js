@@ -32,7 +32,7 @@ class Game {
 		this.playerTokens = board.players;
 
 		const uniqueGhostDiscs = new Set();
-		let lastMovedDisc = {};
+		let lastMovedDisc = { from: {}, to: {} };
 
 		if (this.state.turn > 0) {
 			lastMovedDisc = this.state.movedDiscs[this.state.turn - 1];
