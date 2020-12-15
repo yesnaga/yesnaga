@@ -5,8 +5,233 @@ info:
 servers:
   - url: /api
 paths:
-  /board:
+  /games:
     get:
+      description: returns all games
+      tags:
+        - games
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ArrayOfGames"
+    put:
+      description: creates a new game
+      tags:
+        - games
+      responses:
+        "200":
+          description: Game created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+  /games/{pid}:
+    parameters:
+      - name: pid
+        in: path
+        required: true
+        description: a game id
+        schema:
+          $ref: "#/components/schemas/PID"
+    get:
+      description: returns a game with the given pid
+      tags:
+        - games
+      responses:
+        "200":
+          description: Returns the object representation of the game
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+        "404":
+          description: A game with this pid could not be found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /moveToken:
+    post:
+      description: performs a token move
+      tags:
+        - moves
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    pid:
+                      type: string
+                - $ref: "#/components/schemas/Move"
+      responses:
+        "200":
+          description: a valid move
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+        "400":
+          description: an invalid move produces an error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /moveDisc:
+    post:
+      description: performs a disc move
+      tags:
+        - moves
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    pid:
+                      type: string
+                - $ref: "#/components/schemas/Move"
+      responses:
+        "200":
+          description: a valid move
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResponse"
+        "400":
+          description: an invalid move produces an error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    PID:
+      type: string
+      pattern: "[A-Za-z0-9_-]{21}"
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        status:
+          type: number
+          example: 400
+        request:
+          type: object
+          properties:
+            method:
+              type: string
+            route:
+              type: string
+            params:
+              type: array
+              items:
+                type: string
+            data:
+              type: string
+    GameResponse:
+      type: object
+      properties:
+        pid:
+          type: string
+        friendlyName:
+          type: string
+          example: My Yesnaga Game
+        players:
+          type: array
+          items:
+            type: string
+          example: ["red", "blue"]
+        gamestate:
+          type: object
+          properties:
+            turn:
+              type: number
+              example: 4
+            movedDiscs:
+              type: array
+              items:
+                $ref: "#/components/schemas/Move"
+              example: [{ from: { x: 3, y: 4 }, to: { x: 5, y: 2 } }]
+            phase:
+              type: string
+              example: "initial"
+            board:
+              $ref: "#/components/schemas/Board"
+    ArrayOfGames:
+      type: array
+      items:
+        $ref: "#/components/schemas/GameResponse"
+    Move:
+      type: object
+      properties:
+        from:
+          $ref: "#/components/schemas/Coordinate"
+        to:
+          $ref: "#/components/schemas/Coordinate"
+    Coordinate:
+      type: object
+      properties:
+        x:
+          type: number
+        y:
+          type: number
+    Token:
+      type: object
+      properties:
+        tile:
+          $ref: "#/components/schemas/Coordinate"
+        moveable:
+          type: boolean
+        moveableTo:
+          type: array
+          items:
+            $ref: "#/components/schemas/DiscCoordinate"
+    DiscCoordinate:
+      type: object
+      properties:
+        id:
+          type: number
+        x:
+          type: number
+        y:
+          type: number
+    Disc:
+      allOf:
+        - $ref: "#/components/schemas/DiscCoordinate"
+        - type: object
+          properties:
+            moveable:
+              type: boolean
+            moveableTo:
+              type: array
+              items:
+                $ref: "#/components/schemas/Coordinate"
+    Player:
+      type: object
+      properties:
+        id:
+          type: string
+        tokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/Token"
+    Board:
+      type: object
+      properties:
+        players:
+          type: array
+          items:
+            $ref: "#/components/schemas/Player"
+        discs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Disc"
