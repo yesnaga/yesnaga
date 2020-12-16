@@ -8,7 +8,7 @@ module.exports = (router) => {
 
 	router.put('/games', (req, res, next) => {
 		const game = Game.createNew(req.body);
-		return res.json(game.toObject());
+		return res.status(201).json(game.toObject());
 	});
 
 	router.get('/games/:pid', (req, res, next) => {
