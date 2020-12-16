@@ -21,6 +21,12 @@ paths:
       description: creates a new game
       tags:
         - games
+      requestBody:
+        description: All values are optional and will be filled with defaults if omitted.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameRequest"
       responses:
         "200":
           description: Game created
@@ -137,6 +143,20 @@ components:
                 type: string
             data:
               type: string
+    GameRequest:
+      type: object
+      properties:
+        pid:
+          $ref: "#/components/schemas/PID"
+        players:
+          type: array
+          items:
+            type: string
+          example: ["red", "blue"]
+        friendlyName:
+          type: string
+          example: "My Yesnaga Game"
+      additionalProperties: false
     GameResponse:
       type: object
       properties:
