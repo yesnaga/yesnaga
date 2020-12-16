@@ -1,14 +1,20 @@
 const express = require('express');
 const OpenApiValidator = require('express-openapi-validator');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+
+const apiSpec = YAML.load('./routes/api/openapi.yaml');
 
 const initGameRoutes = require('./game');
 const initMoveRoutes = require('./move');
 
 const router = express.Router();
 
+router.use('/docs', swaggerUi.serve, swaggerUi.setup(apiSpec));
+
 router.use(
 	OpenApiValidator.middleware({
-		apiSpec: './routes/api/openapi.yaml',
+		apiSpec,
 		validateRequests: true,
 		validateResponses: true,
 	}),
