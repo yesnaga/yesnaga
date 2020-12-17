@@ -11,17 +11,23 @@
 		"lint": "eslint . --ext .js --fix",
 		"test": "jest"
 	},
+	"nodemonConfig": {
+		"ext": "js,json,pug,yaml"
+	},
 	"dependencies": {
 		"cookie-parser": "^1.4.5",
 		"debug": "~2.6.9",
 		"express": "~4.16.1",
+		"express-openapi-validator": "^4.9.0",
 		"helmet": "^3.23.3",
 		"http-errors": "~1.6.3",
 		"morgan": "~1.9.1",
 		"nanoid": "^3.1.12",
 		"pug": "^2.0.4",
 		"quick.db": "^7.1.2",
-		"serve-favicon": "^2.5.0"
+		"serve-favicon": "^2.5.0",
+		"swagger-ui-express": "^4.1.5",
+		"yamljs": "^0.3.0"
 	},
 	"devDependencies": {
 		"eslint": "^6.8.0",
