@@ -1,17 +1,18 @@
 # Build stage
-FROM node:lts-alpine
+FROM node:16-alpine
 
 WORKDIR /yesnaga
-RUN apk update && apk upgrade && apk add --no-cache g++ make python
+RUN apk update && apk upgrade && apk add --no-cache g++ make python3
 
 COPY ./package.json .
 COPY ./package-lock.json .
 
-RUN npm ci --only=production
+ENV NODE_ENV=production
+RUN npm ci
 
 
 # Run stage
-FROM node:lts-alpine
+FROM node:16-alpine
 
 WORKDIR /yesnaga
 

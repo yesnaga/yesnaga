@@ -19,14 +19,14 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm test
-      if: matrix.node-version != '14.x'
+      if: matrix.node-version != '16.x'
     - run: npm test -- --coverage
-      if: matrix.node-version == '14.x'
+      if: matrix.node-version == '16.x'
       env:
         CI: true
     - name: Post Coverage
       uses: codecov/codecov-action@v3.1.0
-      if: matrix.node-version == '14.x'
+      if: matrix.node-version == '16.x'
       with:
         flags: unittests
         fail_ci_if_error: true
