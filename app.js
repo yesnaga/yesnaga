@@ -12,7 +12,9 @@ const apiRoutes = require('./routes/api');
 const app = express();
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
-app.use(helmet());
+app.use(helmet({
+	contentSecurityPolicy: false,
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
