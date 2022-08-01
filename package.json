@@ -19,7 +19,7 @@
 		"debug": "^4.3.4",
 		"express": "^4.18.1",
 		"express-openapi-validator": "^4.13.8",
-		"helmet": "^3.23.3",
+		"helmet": "^5.1.1",
 		"http-errors": "~1.6.3",
 		"morgan": "~1.9.1",
 		"nanoid": "^3.3.4",
