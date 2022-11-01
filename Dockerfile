@@ -1,5 +1,5 @@
 # Build stage
-FROM node:16-alpine
+FROM node:19-alpine
 
 WORKDIR /yesnaga
 RUN apk update && apk upgrade && apk add --no-cache g++ make python3
@@ -12,7 +12,7 @@ RUN npm ci
 
 
 # Run stage
-FROM node:16-alpine
+FROM node:19-alpine
 
 WORKDIR /yesnaga
 
