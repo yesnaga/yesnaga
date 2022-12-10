@@ -17,7 +17,7 @@
 	"dependencies": {
 		"cookie-parser": "^1.4.6",
 		"debug": "~2.6.9",
-		"express": "~4.16.1",
+		"express": "~4.18.2",
 		"express-openapi-validator": "^4.13.8",
 		"helmet": "^3.23.3",
 		"http-errors": "~1.6.3",
